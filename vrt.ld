@@ -72,12 +72,16 @@ SECTIONS
 	_BSS_END = .;
 
 	. = ALIGN(4096);
-	_STACK_TOP = .;
-
 	_IMAGE_END = . - 0xFFFFFFFF80000000;
 
-	. += 8K;
-	_STACK_BOTTOM = .;
+	.stack :
+	{
+		_STACK_TOP = .;
+		FILL(0);
+		. += 8K;
+		_STACK_BOTTOM = .;
+	}
+
 	_PAGE_DESCRIPTORS_START = .;
 	
 	/DISCARD/ :

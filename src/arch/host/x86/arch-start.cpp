@@ -86,19 +86,28 @@ static char cmdline[256];
  */
 static bool mb_parse(struct MultibootInfo *multiboot_info)
 {
-	// Figure out what memory is available
+	// Figure out what memory is available.
 	struct MultibootMMAPEntry *mmap_entry = (struct MultibootMMAPEntry *)__phys_to_virt(multiboot_info->mmap_addr);
-		
 	struct MultibootMMAPEntry *mmap_entry_end = (struct MultibootMMAPEntry *)(__phys_to_virt(multiboot_info->mmap_addr + multiboot_info->mmap_length));
+		
 	while (mmap_entry < mmap_entry_end) {
 		
 		switch (mmap_entry->type) {
 		case MULTIBOOT_MEMORY_AVAILABLE:
 			mm.register_physical_memory(mmap_entry->addr, mmap_entry->len);
 			break;
-		}		
+		}
 		
+		// FIXME: Should this increment by "size"?
 		mmap_entry++;
+	}
+	
+	// Figure out what modules are loaded.
+	struct MultibootModuleEntry *module_entry = (struct MultibootModuleEntry *)__phys_to_virt(multiboot_info->mods_addr);
+	struct MultibootModuleEntry *module_entry_end = (struct MultibootModuleEntry *)(__phys_to_virt(multiboot_info->mods_addr + multiboot_info->mods_count * sizeof(struct MultibootModuleEntry)));
+	
+	while (module_entry < module_entry_end) {
+		module_entry++;
 	}
 	
 	// Store the command-line
