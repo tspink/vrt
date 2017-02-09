@@ -25,7 +25,7 @@ export common-flags += -fno-delete-null-pointer-checks -fcheck-new -mno-red-zone
 export common-flags += -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2
 export common-flags += -mno-sse4 -mno-avx -mno-aes -mno-sse4a -mno-fma4
 
-export cxxflags	:= $(common-flags)
+export cxxflags	:= $(common-flags) -include$(inc-dir)/guest-pc.h
 export asflags	:= $(common-flags)
 export ldflags  := -nostdlib -z nodefaultlib 
 
