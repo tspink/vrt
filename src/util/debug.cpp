@@ -14,5 +14,15 @@ void vrt::util::dprintf(DebugLevel::DebugLevel level, const char* msg, ...)
 	vsnprintf(buffer, sizeof(buffer), msg, args);
 	va_end(args);
 
+	switch (level) {
+	case DebugLevel::DEBUG: vrt::arch::host::host_arch->debug_write("debug"); break;
+	case DebugLevel::INFO: vrt::arch::host::host_arch->debug_write(" info"); break;
+	case DebugLevel::WARNING: vrt::arch::host::host_arch->debug_write(" warn"); break;
+	case DebugLevel::ERROR: vrt::arch::host::host_arch->debug_write("error"); break;
+	case DebugLevel::FATAL: vrt::arch::host::host_arch->debug_write("fatal"); break;
+	}
+	
+	vrt::arch::host::host_arch->debug_write(": ");
 	vrt::arch::host::host_arch->debug_write(buffer);
+	vrt::arch::host::host_arch->debug_write("\n");
 }

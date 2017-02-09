@@ -8,6 +8,7 @@
  */
 #include <vrt/mem/mem.h>
 #include <vrt/runtime/environment.h>
+#include <vrt/runtime/main.h>
 #include <vrt/util/debug.h>
 #include <vrt/util/memops.h>
 #include <arch/host/host-architecture.h>
@@ -79,6 +80,10 @@ using namespace vrt::util;
 
 static char cmdline[256];
 
+/**
+ * Parses the multiboot information structure.  We need to extract as much information as we're going to use from
+ * here, so that we can trash the memory later.
+ */
 static bool mb_parse(struct MultibootInfo *multiboot_info)
 {
 	// Figure out what memory is available
@@ -99,8 +104,6 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 	// Store the command-line
 	strncpy(cmdline, (const char *)__phys_to_virt(multiboot_info->cmdline), sizeof(cmdline)-1);
 	cmdline[255] = 0;
-
-	dprintf(DebugLevel::INFO, "command-line: %s\n", cmdline);
 	
 	return true;
 }
@@ -122,35 +125,15 @@ extern "C" __noreturn __noinline void x86_arch_start(phys_addr_t multiboot_info_
 	// (3) Update the initial page tables, so we get access to more memory.
 	update_init_pgt();
 	
-	dprintf(DebugLevel::DEBUG, "Starting Captive VRT...\n");
+	dprintf(DebugLevel::INFO, "starting captive vrt...");
 	
-	// Parse the multiboot information structure.
+	// (4) Parse the multiboot information structure.
 	struct MultibootInfo *mbi = (struct MultibootInfo *)(__phys_to_virt(multiboot_info_phys_ptr));
 	if (!mb_parse(mbi)) {
-		dprintf(DebugLevel::FATAL, "Unable to read multiboot information structure\n");
+		dprintf(DebugLevel::FATAL, "unable to read multiboot information structure");
 		host_arch->abort();
-	}
-
-	// Now, initialise the memory management subsystem.
-	if (!mm.init()) {
-		dprintf(DebugLevel::FATAL, "Memory subsystem initialisation failed!\n");
-		host_arch->abort();
-	}
-		
-	// Create and run the environment.
-	runtime::Environment *env = guest_arch->create_environment();
-	
-	if (!env) {
-		dprintf(DebugLevel::FATAL, "Environment failed to be created!\n");
-		host_arch->abort();
-	}
-		
-	if (!env->run()) {
-		dprintf(DebugLevel::FATAL, "Environment failed to run!\n");
 	}
 	
-	for (;;) {
-		asm volatile("hlt");
-		asm volatile("pause");
-	}
+	// (5) Start the generic runtime.
+	vrt::runtime::start(cmdline);
 }
