@@ -2,9 +2,11 @@
 #include <vrt/mem/buddy-page-allocator.h>
 #include <vrt/mem/simple-object-allocator.h>
 #include <vrt/util/debug.h>
+#include <arch/host/host-architecture.h>
 
 using namespace vrt::mem;
 using namespace vrt::util;
+using namespace vrt::arch::host;
 
 static BuddyPageAllocator buddy_pgalloc;
 static SimpleObjectAllocator simple_objalloc;
@@ -75,6 +77,7 @@ void Memory::register_physical_memory(phys_addr_t start, size_t size)
 			_physical_memory_blocks[i].Start = start;
 			_physical_memory_blocks[i].End = start + size - 1;
 			_physical_memory_blocks[i].IsValid = true;
+			
 			return;
 		}
 	}

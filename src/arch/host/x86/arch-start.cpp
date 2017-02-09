@@ -58,12 +58,21 @@ static void update_init_pgt()
 	
 	// Remove the lower page table mapping (this frees up pages 0x2000 + 0x3000)
 	pte[0] = 0;
+
+	// Insert a new page table for the end of the -2GB VMEM space
+	pte = (ptep_t)(__phys_to_virt(0x4000));
+	pte[0x1ff] = 0x6003;
 	
-	// Insert more entries into the higher mapping
+	// Map the entire -2GB VMEM space 1:1 to Physical Memory
 	pte = (ptep_t)(__phys_to_virt(0x5000));
-	
 	for (unsigned int i = 0; i < 0x200; i++) {
 		phys_addr_t base = 0x200000 * i;
+		pte[i] = (pte_t)(base | 0x83);
+	}
+	
+	pte = (ptep_t)(__phys_to_virt(0x6000));
+	for (unsigned int i = 0; i < 0x200; i++) {
+		phys_addr_t base = 0x200000 * (i + 0x200);
 		pte[i] = (pte_t)(base | 0x83);
 	}
 	

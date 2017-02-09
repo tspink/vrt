@@ -48,7 +48,7 @@ typedef __gnuc_va_list va_list;
 
 #define NULL nullptr
 
-#define KB(__val) (__val >> 10)
+#define KB(__val) ((__val) >> 10)
 #define MB(__val) (KB(__val) >> 10)
 #define GB(__val) (MB(__val) >> 10)
 

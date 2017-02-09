@@ -1,7 +1,9 @@
 #include <arch/host/x86/x86-host-architecture.h>
+#include <vrt/mem/mem.h>
 
 using namespace vrt::arch::host;
 using namespace vrt::arch::host::x86;
+using namespace vrt::mem;
 
 X86HostArchitecture x86_host_arch;
 HostArchitecture *vrt::arch::host::host_arch = &x86_host_arch;
