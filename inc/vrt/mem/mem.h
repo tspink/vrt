@@ -13,9 +13,10 @@ namespace vrt
 		{
 			enum PageDescriptorType
 			{
-				INVALID = 0,
-				SYSTEM = 1,
-				AVAILABLE = 2
+				INVALID		= 0,
+				SYSTEM		= 1,
+				GUEST		= 2,
+				AVAILABLE	= 3
 			};
 		}
 		
@@ -23,7 +24,7 @@ namespace vrt
 		{
 			PageDescriptorType::PageDescriptorType Type;
 			PageDescriptor *NextFree;
-		};
+		} __aligned(16);
 		
 		class Memory
 		{
@@ -41,6 +42,7 @@ namespace vrt
 			PageAllocator *_page_allocator;
 			ObjectAllocator *_obj_allocator;
 			PageDescriptor *_page_descriptors;
+			uint64_t _nr_page_descriptors;
 			
 			struct PhysicalMemoryBlock
 			{

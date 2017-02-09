@@ -26,3 +26,13 @@ void vrt::util::dprintf(DebugLevel::DebugLevel level, const char* msg, ...)
 	vrt::arch::host::host_arch->debug_write(buffer);
 	vrt::arch::host::host_arch->debug_write("\n");
 }
+
+void vrt::util::assertion_failure(const char* filename, int lineno, const char* expression)
+{
+	dprintf(DebugLevel::FATAL, "*** ASSERTION FAILURE *** %s:%d <%s>", 
+			filename,
+			lineno,
+			expression);
+	
+	halt();
+}
