@@ -16,7 +16,7 @@ __pzero:
 	// Clear EAX
 	xor %eax, %eax
 
-	// Store zeroes
+	// Store zeros
 	rep stosq %rax, %es:(%rdi)
 
 	// Finished.
@@ -25,21 +25,28 @@ __pzero:
 .globl __bzero
 .type __bzero, %function
 __bzero:
+	// Clear the direction flag (DF)
 	cld
 
+	// Load the number of bytes to clear, and divide by eight.
 	mov %rsi, %rcx
 	shr $3, %rcx
 
+	// Clear EAX
 	xor %eax, %eax
 	
+	// Store zeros in 8-byte increments
 	rep stosq %rax, %es:(%rdi)
 
-	movq %rsi, %rcx
-	and $3, %rcx
+	// Load the number of bytes to clear, and modulo by eight.  It's okay to use
+	// the 32-bit registers here, because we're about to mask by 0b11 anyway.
+	mov %esi, %ecx
+	and $3, %ecx
 
 .align 16
 2:
+	// Clear the remaining bytes in 1-byte increments
 	rep stosb %al, %es:(%rdi)
 
-	mov %rdi, %rax
+	// Done
 	ret
