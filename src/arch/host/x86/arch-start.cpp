@@ -183,6 +183,10 @@ extern "C" __noreturn __noinline void x86_arch_start(phys_addr_t multiboot_info_
 	
 	// Early information message
 	dprintf(DebugLevel::INFO, "Starting the Captive Virtual Runtime!");
+	
+	uint64_t rsp;
+	asm volatile("mov %%rsp, %0" : "=r"(rsp));
+	dprintf(DebugLevel::DEBUG, "rsp=%p", rsp);
 
 	// (3) Check host architecture capabilities.
 	check_arch_caps();

@@ -63,6 +63,9 @@ typedef __gnuc_va_list va_list;
 #define __page_index(__addr) ((__addr) >> __page_bits)
 #define __page_base_from_index(__idx) ((__idx) << __page_bits)
 
+#define __align_up(__addr) (((__addr) & ~0xfffULL) + (((__addr) & 0xfffULL) ? 0x1000 : 0))
+#define __align_down(__addr) ((__addr) & ~0xfffULL)
+
 #define KERNEL_VMA_START 0xFFFFFFFF80000000ULL
 
 #define __phys_to_upper_virt(__addr) ((virt_addr_t)(KERNEL_VMA_START + ((uintptr_t)(__addr))))

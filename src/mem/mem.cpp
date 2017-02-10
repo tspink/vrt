@@ -83,7 +83,19 @@ void Memory::register_physical_memory(phys_addr_t start, size_t size)
 	}
 }
 
+bool Memory::reserve_pages(phys_addr_t base, size_t nr_pages)
+{
+	dprintf(DebugLevel::DEBUG, "mem: reserving %p (%lu)", base, nr_pages);
+	for (phys_addr_t page = base; page < (base + (nr_pages << __page_bits)); page += __page_size) {
+		_page_allocator->reserve_page(pa_to_pgd(page));
+	}
+
+	return true;
+}
+
+
 extern char _IMAGE_START, _IMAGE_END;
+extern char _STACK_TOP, _STACK_BOTTOM;
 
 /**
  * Instructs the page allocator to disregard certain regions of memory.
@@ -94,28 +106,23 @@ bool Memory::perform_reservations()
 	_page_allocator->reserve_page(pfn_to_pgd(0));
 	
 	// TODO: ABSTRACT THIS! Reserve the initial page tables.
-	for (unsigned int page = 0x10000; page < 0x20000; page += 0x1000) {
-		_page_allocator->reserve_page(pa_to_pgd(page));
-	}
+	reserve_pages((phys_addr_t)0x10000, 16);
 	
-	// Reserve kernel code + stack + page descriptors
-	uintptr_t start = ((uintptr_t)&_IMAGE_START) & ~0xfffULL;
+	// Reserve the kernel image
+	uintptr_t start = __align_down((uintptr_t)&_IMAGE_START);
 	uintptr_t end = __align_up((uintptr_t)&_IMAGE_END);
 	
-	// Add stack size, because the stack lives AFTER the end of the image.
-	end += 0x2000;
+	reserve_pages((phys_addr_t)start, (end - start) >> __page_bits);
 	
-	// Add PGD array size, which lives AFTER the stack.
-	end += (_nr_page_descriptors * sizeof(PageDescriptor));
+	// Reserve the stack
+	start = __align_down(__upper_virt_to_phys((uintptr_t)&_STACK_TOP));
+	end = __align_up(__upper_virt_to_phys((uintptr_t)&_STACK_BOTTOM));
 	
-	// Align 'end' up to the next page boundary.
-	end = __align_up(end);
+	reserve_pages((phys_addr_t)start, (end - start) >> __page_bits);
 	
-	dprintf(DebugLevel::DEBUG, "kernel region start=%p, end=%p", start, end);
-
-	for (uintptr_t kernel_page = start; kernel_page < end; kernel_page += 0x1000) {
-		_page_allocator->reserve_page(pa_to_pgd(kernel_page));
-	}
+	// Reserve the page descriptor array
+	start = __align_down(__upper_virt_to_phys((uintptr_t)_page_descriptors));
+	reserve_pages((phys_addr_t)start, (_nr_page_descriptors * sizeof(*_page_descriptors)) >> __page_bits);
 	
 	// ((BuddyPageAllocator *)_page_allocator)->dump();
 	((BuddyPageAllocator *)_page_allocator)->print_statistics();

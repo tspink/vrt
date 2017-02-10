@@ -80,6 +80,7 @@ namespace vrt
 			
 			PhysicalMemoryBlock _physical_memory_blocks[8];
 			
+			bool reserve_pages(phys_addr_t base, size_t nr_pages);
 			bool perform_reservations();
 			bool initialise_page_descriptors();
 		};
