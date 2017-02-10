@@ -2,6 +2,7 @@
 #include <vrt/runtime/environment.h>
 #include <vrt/mem/mem.h>
 #include <vrt/util/debug.h>
+#include <vrt/util/memops.h>
 #include <arch/guest/guest-architecture.h>
 #include <arch/host/host-architecture.h>
 
@@ -33,7 +34,7 @@ __noreturn void vrt::runtime::start(const char *cmdline)
 		dprintf(DebugLevel::FATAL, "vrt: environment failed to be created!");
 		host_arch->abort();
 	}
-	
+		
 	// Run the environment, and check that it ran correctly.
 	if (!env->run()) {
 		dprintf(DebugLevel::FATAL, "vrt: environment failed to run!");

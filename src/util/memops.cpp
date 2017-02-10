@@ -16,7 +16,7 @@ __weak void vrt::util::pzero(void* ptr, size_t count)
 
 __weak char *vrt::util::strncpy(char *dest, const char *src, size_t n)
 {
-	for (unsigned int i = 0; i < n; i++) {
+	for (unsigned long i = 0; i < n; i++) {
 		dest[i] = src[i];
 		if (src[i] == 0) {
 			break;

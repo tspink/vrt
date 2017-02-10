@@ -22,6 +22,46 @@ __pzero:
 	// Finished.
 	ret
 
+.align 16
+.globl __memcpy
+.type __memcpy, %function
+__memcpy:
+	mov %rdi, %rax
+
+	cld
+
+	mov %rdx, %rcx
+	shr $3, %rcx
+	
+	rep movsq %ds:(%rsi), %es:(%rdi)
+
+	mov %rdx, %rcx
+	and $7, %rcx
+
+	rep movsb %ds:(%rsi), %es:(%rdi)
+	
+	ret
+
+//
+// WARNING! The following two functions are tightly coupled, in a non-obvious way!
+//
+
+.align 16
+.globl __memset
+.type __memset, %function
+__memset:
+	test %rsi, %rsi
+	jz 1f
+
+	cld
+	mov %esi, %eax
+	mov %rdx, %rcx
+	jmp 2f
+
+1:
+	mov %rdx, %rsi
+
+.align 16
 .globl __bzero
 .type __bzero, %function
 __bzero:
