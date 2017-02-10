@@ -13,7 +13,15 @@
 #include <vrt/util/memops.h>
 #include <arch/host/host-architecture.h>
 #include <arch/host/x86/multiboot.h>
+#include <arch/host/x86/cpuid.h>
 #include <arch/guest/guest-architecture.h>
+
+using namespace vrt;
+using namespace vrt::arch::host;
+using namespace vrt::arch::host::x86;
+using namespace vrt::arch::guest;
+using namespace vrt::mem;
+using namespace vrt::util;
 
 extern char _BSS_START, _BSS_END;
 
@@ -40,7 +48,21 @@ static void run_static_ctors()
 	}
 }
 
+/**
+ * Makes sure the host architecture supports the necessary capabilities.
+ */
+static void check_arch_caps()
+{
+	auto features = cpuid_get_features();
+	
+	if (!(features.rdx & CPUIDFeatures::PAE)) {
+		fatal("CPU does not support PAE");
+	}
+}
+
+// Starting address to allocate initial page tables from;
 static uintptr_t _init_pgt_start = 0x10000;
+static const uintptr_t _init_pgt_end = 0x20000;
 
 /**
  * Allocates an initial page table.
@@ -48,7 +70,7 @@ static uintptr_t _init_pgt_start = 0x10000;
  */
 static void *alloc_init_pgt()
 {
-	assert(_init_pgt_start < 0x20000);
+	assert(_init_pgt_start < _init_pgt_end);
 	
 	void *next = (void *)__phys_to_upper_virt(_init_pgt_start);
 	_init_pgt_start += 0x1000;
@@ -106,13 +128,6 @@ static void update_init_pgt()
 	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4)));
 }
 
-using namespace vrt;
-using namespace vrt::arch::host;
-using namespace vrt::arch::host::x86;
-using namespace vrt::arch::guest;
-using namespace vrt::mem;
-using namespace vrt::util;
-
 static char cmdline[256];
 
 /**
@@ -166,11 +181,15 @@ extern "C" __noreturn __noinline void x86_arch_start(phys_addr_t multiboot_info_
 	// (2) Run the static constructors.
 	run_static_ctors();
 	
-	// (3) Update the initial page tables, so we get access to more memory.
+	// Early information message
+	dprintf(DebugLevel::INFO, "Starting the Captive Virtual Runtime!");
+
+	// (3) Check host architecture capabilities.
+	check_arch_caps();
+	
+	// (4) Update the initial page tables, so we get access to more memory.
 	update_init_pgt();
-	
-	dprintf(DebugLevel::INFO, "starting captive vrt...");
-	
+		
 	// (4) Parse the multiboot information structure.
 	struct MultibootInfo *mbi = (struct MultibootInfo *)(__phys_to_upper_virt(multiboot_info_phys_ptr));
 	if (!mb_parse(mbi)) {
