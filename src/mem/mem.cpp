@@ -99,12 +99,25 @@ bool Memory::perform_reservations()
 	}
 	
 	// Reserve kernel code + stack + page descriptors
-	uintptr_t end = ((uintptr_t)&_IMAGE_END) & ~0xfff;
-	for (uintptr_t kernel_page = ((uintptr_t)&_IMAGE_START) & ~0xfff; kernel_page <= end; kernel_page += 0x1000) {
+	uintptr_t start = ((uintptr_t)&_IMAGE_START) & ~0xfffULL;
+	uintptr_t end = __align_up((uintptr_t)&_IMAGE_END);
+	
+	// Add stack size, because the stack lives AFTER the end of the image.
+	end += 0x2000;
+	
+	// Add PGD array size, which lives AFTER the stack.
+	end += (_nr_page_descriptors * sizeof(PageDescriptor));
+	
+	// Align 'end' up to the next page boundary.
+	end = __align_up(end);
+	
+	dprintf(DebugLevel::DEBUG, "kernel region start=%p, end=%p", start, end);
+
+	for (uintptr_t kernel_page = start; kernel_page < end; kernel_page += 0x1000) {
 		_page_allocator->reserve_page(pa_to_pgd(kernel_page));
 	}
 	
-	//((BuddyPageAllocator *)_page_allocator)->dump();
+	// ((BuddyPageAllocator *)_page_allocator)->dump();
 	((BuddyPageAllocator *)_page_allocator)->print_statistics();
 	return true;
 }
