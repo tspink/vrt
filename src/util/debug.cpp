@@ -34,5 +34,6 @@ void vrt::util::assertion_failure(const char* filename, int lineno, const char* 
 			lineno,
 			expression);
 	
-	halt();
+	vrt::arch::host::host_arch->abort();
+	__unreachable();
 }

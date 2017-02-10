@@ -29,6 +29,7 @@ typedef __builtin_va_list __gnuc_va_list;
 typedef __gnuc_va_list va_list;
 
 #define __weak __attribute__((weak))
+#define __strong 
 #define __packed __attribute__((packed))
 #define __noreturn __attribute__((noreturn))
 #define __noinline __attribute__((noinline))

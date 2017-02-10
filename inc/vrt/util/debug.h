@@ -21,11 +21,13 @@ namespace vrt {
 #define assert(_expr) do { if (!(_expr)) { assertion_failure(__FILE__, __LINE__, #_expr); __unreachable(); } } while(0)
 #define not_implemented() assert(false && "NOT IMPLEMENTED")
 
-		static inline void halt() {
+		__noreturn static inline void halt() {
 			for (;;) {
 				asm volatile("hlt");
 				asm volatile("pause");
 			}
+			
+			__unreachable();
 		}
 	}
 }
