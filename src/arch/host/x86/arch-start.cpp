@@ -88,12 +88,17 @@ static void update_init_pgt()
 	typedef uint64_t pte_t;
 	typedef pte_t *ptep_t;
 	
-	ptep_t pml4 = (ptep_t)alloc_init_pgt();
+	ptep_t pml4_A = (ptep_t)alloc_init_pgt();
+	ptep_t pml4_B = (ptep_t)alloc_init_pgt();
+	
 	ptep_t pdp0 = (ptep_t)alloc_init_pgt();
 	ptep_t pd0 = (ptep_t)alloc_init_pgt();
 	ptep_t pd1 = (ptep_t)alloc_init_pgt();
 	
-	pml4[0x1ff] = __upper_virt_to_phys(pdp0) | 0x003;
+	// Initialise PML4-A and PML4-B with the same upper pointers.
+	pml4_A[0x1ff] = __upper_virt_to_phys(pdp0) | 0x003;
+	pml4_B[0x1ff] = __upper_virt_to_phys(pdp0) | 0x003;
+	
 	pdp0[0x1fe] = __upper_virt_to_phys(pd0) | 0x003;
 	pdp0[0x1ff] = __upper_virt_to_phys(pd1) | 0x003;
 	
@@ -110,7 +115,8 @@ static void update_init_pgt()
 	
 	// Map lots of physical memory from the 48-bit split
 	ptep_t pdp1 = (ptep_t)alloc_init_pgt();
-	pml4[0x100] = __upper_virt_to_phys(pdp1) | 0x003;
+	pml4_A[0x100] = __upper_virt_to_phys(pdp1) | 0x003;
+	pml4_B[0x100] = __upper_virt_to_phys(pdp1) | 0x003;
 
 	// Map 8 GB of physical memory, using 8 * 512 * 2MB pages
 	for (unsigned int pdp_index = 0; pdp_index < 8; pdp_index++) {
@@ -125,7 +131,7 @@ static void update_init_pgt()
 	}
 		
 	// Flush the page table
-	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4)));
+	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4_A)));
 }
 
 static char cmdline[256];
