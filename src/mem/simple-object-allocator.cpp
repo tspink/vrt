@@ -4,6 +4,9 @@
 using namespace vrt::mem;
 using namespace vrt::util;
 
+extern "C" void *dlmalloc(size_t size);
+extern "C" void dlfree(void *ptr);
+
 bool SimpleObjectAllocator::init()
 {
 	return true;
@@ -11,10 +14,10 @@ bool SimpleObjectAllocator::init()
 
 void* SimpleObjectAllocator::alloc(size_t size)
 {
-	return nullptr;
+	return dlmalloc(size);
 }
 
 void SimpleObjectAllocator::free(void* p)
 {
-
+	dlfree(p);
 }

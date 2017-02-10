@@ -50,7 +50,11 @@ namespace vrt
 			}
 			
 			void *pgd_to_va(const PageDescriptor *pgd) const {
-				return (void *)((uintptr_t)0xffff800000000000);
+				return (void *)((uintptr_t)0xffff800000000000ULL + __page_base_from_index(pgd_to_pfn(pgd)));
+			}
+			
+			PageDescriptor *va_to_pgd(void *va) const {
+				return (PageDescriptor *)&_page_descriptors[(__page_index((uintptr_t)va - 0xffff800000000000ULL))];
 			}
 			
 			PageDescriptor *pfn_to_pgd(pfn_t pfn) const {
