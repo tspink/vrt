@@ -128,8 +128,8 @@ void BuddyPageAllocator::dump()
 		while (current) {
 			snprintf(buffer, 512, "%s %lx--%lx",
 					buffer,
-					mm.page_descriptor_to_pfn(current),
-					mm.page_descriptor_to_pfn(current) + pages_per_block(i) - 1);
+					mm.pgd_to_pfn(current),
+					mm.pgd_to_pfn(current) + pages_per_block(i) - 1);
 			current = current->NextFree;
 		}
 
@@ -156,10 +156,10 @@ PageDescriptor *BuddyPageAllocator::buddy_of(PageDescriptor *pgd, order_t order)
 	}
 
 	uint64_t buddy_pfn = is_correct_alignment_for_order(pgd, order + 1) ?
-			mm.page_descriptor_to_pfn(pgd) + pages_per_block(order) :
-			mm.page_descriptor_to_pfn(pgd) - pages_per_block(order);
+			mm.pgd_to_pfn(pgd) + pages_per_block(order) :
+			mm.pgd_to_pfn(pgd) - pages_per_block(order);
 
-	return mm.pfn_to_page_descriptor(buddy_pfn);
+	return mm.pfn_to_pgd(buddy_pfn);
 }
 
 PageDescriptor **BuddyPageAllocator::insert_block(PageDescriptor *pgd, order_t order)

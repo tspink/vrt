@@ -41,16 +41,24 @@ namespace vrt
 			PageDescriptor *page_descriptors() const { return _page_descriptors; }
 			uint64_t nr_page_descriptors() const { return _nr_page_descriptors; }
 			
-			pfn_t page_descriptor_to_pfn(const PageDescriptor *pgd) const {
+			pfn_t pgd_to_pfn(const PageDescriptor *pgd) const {
 				return ((uintptr_t)pgd - (uintptr_t)_page_descriptors) / sizeof(*_page_descriptors);
 			}
 			
-			PageDescriptor *pfn_to_page_descriptor(pfn_t pfn) const {
+			phys_addr_t pgd_to_pa(const PageDescriptor *pgd) const {
+				return (pgd_to_pfn(pgd) << __page_bits);
+			}
+			
+			void *pgd_to_va(const PageDescriptor *pgd) const {
+				return (void *)((uintptr_t)0xffff800000000000);
+			}
+			
+			PageDescriptor *pfn_to_pgd(pfn_t pfn) const {
 				return &_page_descriptors[pfn];
 			}
 			
-			PageDescriptor *pa_to_page_descriptor(phys_addr_t pa) const {
-				return &_page_descriptors[(pa >> 12)];
+			PageDescriptor *pa_to_pgd(phys_addr_t pa) const {
+				return &_page_descriptors[__page_index(pa)];
 			}
 			
 		private:

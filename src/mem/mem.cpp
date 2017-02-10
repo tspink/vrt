@@ -90,22 +90,21 @@ extern char _IMAGE_START, _IMAGE_END;
  */
 bool Memory::perform_reservations()
 {
-	_page_allocator->reserve_page(pfn_to_page_descriptor(0)); // Reserve page zero.
+	// Reserve page zero.
+	_page_allocator->reserve_page(pfn_to_pgd(0));
 	
-	// Reserve page tables
-	_page_allocator->reserve_page(pa_to_page_descriptor(0x1000));
-	_page_allocator->reserve_page(pa_to_page_descriptor(0x2000));
-	_page_allocator->reserve_page(pa_to_page_descriptor(0x3000));
-	_page_allocator->reserve_page(pa_to_page_descriptor(0x4000));
-	_page_allocator->reserve_page(pa_to_page_descriptor(0x5000));
-	_page_allocator->reserve_page(pa_to_page_descriptor(0x6000));
-
+	// TODO: ABSTRACT THIS! Reserve the initial page tables.
+	for (unsigned int page = 0x10000; page < 0x20000; page += 0x1000) {
+		_page_allocator->reserve_page(pa_to_pgd(page));
+	}
+	
 	// Reserve kernel code + stack + page descriptors
 	uintptr_t end = ((uintptr_t)&_IMAGE_END) & ~0xfff;
 	for (uintptr_t kernel_page = ((uintptr_t)&_IMAGE_START) & ~0xfff; kernel_page <= end; kernel_page += 0x1000) {
-		_page_allocator->reserve_page(pa_to_page_descriptor(kernel_page));
+		_page_allocator->reserve_page(pa_to_pgd(kernel_page));
 	}
 	
+	//((BuddyPageAllocator *)_page_allocator)->dump();
 	((BuddyPageAllocator *)_page_allocator)->print_statistics();
 	return true;
 }

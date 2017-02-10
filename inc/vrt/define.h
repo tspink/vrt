@@ -61,6 +61,9 @@ typedef __gnuc_va_list va_list;
 #define __page_base(__addr) ((__addr) & ~(__page_size - 1))
 #define __page_index(__addr) ((__addr) >> __page_bits)
 
-#define __phys_to_virt(__addr) ((virt_addr_t)(0xFFFFFFFF80000000 + (__addr)))
+#define KERNEL_VMA_START 0xFFFFFFFF80000000ULL
+
+#define __phys_to_upper_virt(__addr) ((virt_addr_t)(KERNEL_VMA_START + ((uintptr_t)(__addr))))
+#define __upper_virt_to_phys(__addr) ((phys_addr_t)(((uintptr_t)(__addr)) - KERNEL_VMA_START))
 
 #include <vrt/assert.h>

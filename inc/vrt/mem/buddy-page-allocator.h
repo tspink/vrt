@@ -37,7 +37,7 @@ namespace vrt
 			
 			static inline bool is_correct_alignment_for_order(const PageDescriptor *pgd, order_t order)
 			{
-				return (mm.page_descriptor_to_pfn(pgd) % pages_per_block(order)) == 0;
+				return (mm.pgd_to_pfn(pgd) % pages_per_block(order)) == 0;
 			}
 		};
 	}

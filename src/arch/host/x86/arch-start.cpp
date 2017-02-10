@@ -40,6 +40,21 @@ static void run_static_ctors()
 	}
 }
 
+static uintptr_t _init_pgt_start = 0x10000;
+
+/**
+ * Allocates an initial page table.
+ * @return A virtual pointer to the page table.
+ */
+static void *alloc_init_pgt()
+{
+	void *next = (void *)__phys_to_upper_virt(_init_pgt_start);
+	_init_pgt_start += 0x1000;
+	
+	vrt::util::pzero(next, 1);
+	return next;
+}
+
 /**
  * Updates the initial page tables, by removing the lower memory mapping and
  * inserting more entries into the upper address space.
@@ -49,35 +64,30 @@ static void update_init_pgt()
 	typedef uint64_t pte_t;
 	typedef pte_t *ptep_t;
 	
-	uintptr_t cr3;
-	asm volatile("mov %%cr3, %0" : "=r"(cr3));
+	ptep_t pml4 = (ptep_t)alloc_init_pgt();
+	ptep_t pdp0 = (ptep_t)alloc_init_pgt();
+	ptep_t pd0 = (ptep_t)alloc_init_pgt();
+	ptep_t pd1 = (ptep_t)alloc_init_pgt();
 	
-	// Convert the physical pml4 address into a virtual address,
-	// so that we can manipulate the table.
-	ptep_t pte = (ptep_t)(__phys_to_virt(cr3));
-	
-	// Remove the lower page table mapping (this frees up pages 0x2000 + 0x3000)
-	pte[0] = 0;
-
-	// Insert a new page table for the end of the -2GB VMEM space
-	pte = (ptep_t)(__phys_to_virt(0x4000));
-	pte[0x1ff] = 0x6003;
+	pml4[0x1ff] = __upper_virt_to_phys(pdp0) | 0x003;
+	pdp0[0x1fe] = __upper_virt_to_phys(pd0) | 0x003;
+	pdp0[0x1ff] = __upper_virt_to_phys(pd1) | 0x003;
 	
 	// Map the entire -2GB VMEM space 1:1 to Physical Memory
-	pte = (ptep_t)(__phys_to_virt(0x5000));
 	for (unsigned int i = 0; i < 0x200; i++) {
 		phys_addr_t base = 0x200000 * i;
-		pte[i] = (pte_t)(base | 0x83);
+		pd0[i] = (pte_t)(base | 0x83);
 	}
 	
-	pte = (ptep_t)(__phys_to_virt(0x6000));
 	for (unsigned int i = 0; i < 0x200; i++) {
 		phys_addr_t base = 0x200000 * (i + 0x200);
-		pte[i] = (pte_t)(base | 0x83);
+		pd1[i] = (pte_t)(base | 0x83);
 	}
 	
+	// Now map a lot of physical memory
+		
 	// Flush the page table
-	asm volatile("mov %0, %%cr3" :: "r"(cr3));
+	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4)));
 }
 
 using namespace vrt;
@@ -96,8 +106,8 @@ static char cmdline[256];
 static bool mb_parse(struct MultibootInfo *multiboot_info)
 {
 	// Figure out what memory is available.
-	struct MultibootMMAPEntry *mmap_entry = (struct MultibootMMAPEntry *)__phys_to_virt(multiboot_info->mmap_addr);
-	struct MultibootMMAPEntry *mmap_entry_end = (struct MultibootMMAPEntry *)(__phys_to_virt(multiboot_info->mmap_addr + multiboot_info->mmap_length));
+	struct MultibootMMAPEntry *mmap_entry = (struct MultibootMMAPEntry *)__phys_to_upper_virt(multiboot_info->mmap_addr);
+	struct MultibootMMAPEntry *mmap_entry_end = (struct MultibootMMAPEntry *)(__phys_to_upper_virt(multiboot_info->mmap_addr + multiboot_info->mmap_length));
 		
 	while (mmap_entry < mmap_entry_end) {
 		
@@ -112,15 +122,15 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 	}
 	
 	// Figure out what modules are loaded.
-	struct MultibootModuleEntry *module_entry = (struct MultibootModuleEntry *)__phys_to_virt(multiboot_info->mods_addr);
-	struct MultibootModuleEntry *module_entry_end = (struct MultibootModuleEntry *)(__phys_to_virt(multiboot_info->mods_addr + multiboot_info->mods_count * sizeof(struct MultibootModuleEntry)));
+	struct MultibootModuleEntry *module_entry = (struct MultibootModuleEntry *)__phys_to_upper_virt(multiboot_info->mods_addr);
+	struct MultibootModuleEntry *module_entry_end = (struct MultibootModuleEntry *)(__phys_to_upper_virt(multiboot_info->mods_addr + multiboot_info->mods_count * sizeof(struct MultibootModuleEntry)));
 	
 	while (module_entry < module_entry_end) {
 		module_entry++;
 	}
 	
 	// Store the command-line
-	strncpy(cmdline, (const char *)__phys_to_virt(multiboot_info->cmdline), sizeof(cmdline)-1);
+	strncpy(cmdline, (const char *)__phys_to_upper_virt(multiboot_info->cmdline), sizeof(cmdline)-1);
 	cmdline[255] = 0;
 	
 	return true;
@@ -146,7 +156,7 @@ extern "C" __noreturn __noinline void x86_arch_start(phys_addr_t multiboot_info_
 	dprintf(DebugLevel::INFO, "starting captive vrt...");
 	
 	// (4) Parse the multiboot information structure.
-	struct MultibootInfo *mbi = (struct MultibootInfo *)(__phys_to_virt(multiboot_info_phys_ptr));
+	struct MultibootInfo *mbi = (struct MultibootInfo *)(__phys_to_upper_virt(multiboot_info_phys_ptr));
 	if (!mb_parse(mbi)) {
 		dprintf(DebugLevel::FATAL, "unable to read multiboot information structure");
 		host_arch->abort();
