@@ -48,6 +48,8 @@ static uintptr_t _init_pgt_start = 0x10000;
  */
 static void *alloc_init_pgt()
 {
+	assert(_init_pgt_start < 0x20000);
+	
 	void *next = (void *)__phys_to_upper_virt(_init_pgt_start);
 	_init_pgt_start += 0x1000;
 	
@@ -84,7 +86,21 @@ static void update_init_pgt()
 		pd1[i] = (pte_t)(base | 0x83);
 	}
 	
-	// Now map a lot of physical memory
+	// Map lots of physical memory from the 48-bit split
+	ptep_t pdp1 = (ptep_t)alloc_init_pgt();
+	pml4[0x100] = __upper_virt_to_phys(pdp1) | 0x003;
+
+	// Map 8 GB of physical memory, using 8 * 512 * 2MB pages
+	for (unsigned int pdp_index = 0; pdp_index < 8; pdp_index++) {
+		ptep_t pd = (ptep_t)alloc_init_pgt();
+		pdp1[pdp_index] = __upper_virt_to_phys(pd) | 0x003;		
+		
+		// Install a 1 GB mapping, using 512 2MB pages
+		for (unsigned int pd_index = 0; pd_index < 0x200; pd_index++) {
+			phys_addr_t base = 0x200000 * (pd_index + (pdp_index * 0x200));
+			pd[pd_index] = (pte_t)(base | 0x83);
+		}
+	}
 		
 	// Flush the page table
 	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4)));
