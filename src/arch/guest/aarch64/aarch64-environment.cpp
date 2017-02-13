@@ -5,9 +5,14 @@
 using namespace vrt::arch::guest::aarch64;
 using namespace vrt::util;
 
-AArch64Environment::AArch64Environment() : _bsp(nullptr)
+AArch64Environment::AArch64Environment(dbt::DBT& dbt) : Environment(dbt), _bsp(nullptr)
 {
 
+}
+
+bool AArch64Environment::init()
+{
+	return true;
 }
 
 bool AArch64Environment::run()

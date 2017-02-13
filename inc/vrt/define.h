@@ -17,6 +17,7 @@ typedef signed long		intptr_t;
 typedef signed long int		intmax_t;
 typedef unsigned long int	uintmax_t;
 
+typedef uintptr_t		guest_phys_addr_t;
 typedef uintptr_t		phys_addr_t;
 typedef uintptr_t		virt_addr_t;
 typedef uint64_t		pfn_t;

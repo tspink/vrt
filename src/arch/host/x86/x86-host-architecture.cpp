@@ -18,7 +18,11 @@ bool X86HostArchitecture::init_platform()
 {
 	_irq_manager = new IRQManager();
 	
-	return _irq_manager->init();
+	if (!_irq_manager->init()) {
+		return false;
+	}
+	
+	return true;
 }
 
 __noreturn void X86HostArchitecture::abort()

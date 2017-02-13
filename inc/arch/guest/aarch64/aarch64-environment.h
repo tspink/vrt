@@ -15,8 +15,9 @@ namespace vrt
 				class AArch64Environment : public runtime::Environment
 				{
 				public:
-					AArch64Environment();
+					AArch64Environment(dbt::DBT& dbt);
 					
+					bool init() override;
 					bool run() override;
 					
 				private:

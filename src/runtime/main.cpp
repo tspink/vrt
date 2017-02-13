@@ -1,5 +1,6 @@
 #include <vrt/runtime/main.h>
 #include <vrt/runtime/environment.h>
+#include <vrt/dbt/dbt.h>
 #include <vrt/mem/mem.h>
 #include <vrt/util/debug.h>
 #include <vrt/util/memops.h>
@@ -9,6 +10,7 @@
 using namespace vrt;
 using namespace vrt::arch::guest;
 using namespace vrt::arch::host;
+using namespace vrt::dbt;
 using namespace vrt::mem;
 using namespace vrt::runtime;
 using namespace vrt::util;
@@ -35,8 +37,11 @@ __noreturn void vrt::runtime::start(const char *cmdline)
 		host_arch->abort();
 	}
 		
+	// Initialise the DBT
+	CaptiveDBT dbt(guest_arch->decoder());
+	
 	// Create and run the environment.
-	runtime::Environment *env = guest_arch->create_environment();
+	runtime::Environment *env = guest_arch->create_environment(dbt);
 	
 	// Check that the environment was constructed.
 	if (!env) {

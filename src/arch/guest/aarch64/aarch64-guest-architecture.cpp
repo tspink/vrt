@@ -4,10 +4,11 @@
 using namespace vrt::arch::guest;
 using namespace vrt::arch::guest::aarch64;
 
-AArch64GuestArchitecture aarch64_guest_arch;
+AArch64InstructionDecoder aarch64_decoder;
+AArch64GuestArchitecture aarch64_guest_arch(aarch64_decoder);
 GuestArchitecture *vrt::arch::guest::guest_arch = &aarch64_guest_arch;
 
-vrt::runtime::Environment* AArch64GuestArchitecture::create_environment()
+vrt::runtime::Environment* AArch64GuestArchitecture::create_environment(dbt::DBT& dbt)
 {
-	return new AArch64Environment();
+	return new AArch64Environment(dbt);
 }
