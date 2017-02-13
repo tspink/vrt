@@ -19,6 +19,9 @@ using namespace vrt::util;
 __noreturn void vrt::runtime::start(const char *cmdline)
 {
 	dprintf(DebugLevel::INFO, "vrt: command line=%s", cmdline);
+	
+	// Make sure we're in the low64 address space.
+	host_arch->switch_to_low64();
 
 	// Initialise the memory management subsystem.
 	if (!mm.init()) {
