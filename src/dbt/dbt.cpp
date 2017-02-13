@@ -1,4 +1,5 @@
 #include <vrt/dbt/dbt.h>
+#include <vrt/dbt/translation.h>
 
 using namespace vrt::dbt;
 
@@ -7,7 +8,7 @@ CaptiveDBT::CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder) : DBT(deco
 
 }
 
-virt_addr_t CaptiveDBT::translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags)
+Translation *CaptiveDBT::translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags)
 {
 	return 0;
 }

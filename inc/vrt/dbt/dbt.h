@@ -21,12 +21,14 @@ namespace vrt
 			};
 		}
 		
+		class Translation;
+		
 		class DBT
 		{
 		public:
 			DBT(arch::guest::GuestInstructionDecoder& decoder) : _decoder(decoder) { }
 			
-			virtual virt_addr_t translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags) = 0;
+			virtual Translation *translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags) = 0;
 			
 		protected:
 			arch::guest::GuestInstructionDecoder& decoder() const { return _decoder; }
@@ -40,7 +42,7 @@ namespace vrt
 		public:
 			CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder);
 			
-			virt_addr_t translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags) override;
+			Translation *translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags) override;
 		};
 	}
 }

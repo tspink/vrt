@@ -34,7 +34,7 @@ bool AArch64Environment::setup_platform()
 {
 	// TODO: Create guest devices
 	
-	_bsp = new AArch64Processor();
+	_bsp = new AArch64Processor(*this);
 	return true;
 }
 

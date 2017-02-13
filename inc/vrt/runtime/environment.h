@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vrt/define.h>
+#include <vrt/dbt/translation-cache.h>
 
 namespace vrt
 {
@@ -19,11 +20,12 @@ namespace vrt
 			virtual bool init() = 0;
 			virtual bool run() = 0;
 			
-		protected:
 			dbt::DBT& dbt() const { return _dbt; }
+			dbt::TranslationCache<>& translation_cache() { return _tcache; }
 			
 		private:
 			dbt::DBT& _dbt;
+			dbt::TranslationCache<> _tcache;
 		};
 	}
 }

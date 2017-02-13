@@ -40,6 +40,9 @@ typedef __gnuc_va_list va_list;
 #define __init_priority(__n) __attribute__((init_priority(__n)))
 #define __unreachable() __builtin_unreachable()
 
+#define __likely(x) __builtin_expect((x), 1)
+#define __unlikely(x) __builtin_expect((x), 0)
+
 #define ARRAY_SIZE(__arr) (sizeof(__arr) / sizeof(__arr[0]))
 
 #define offsetof(st, m) __builtin_offsetof(st, m)
