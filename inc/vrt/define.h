@@ -70,3 +70,7 @@ typedef __gnuc_va_list va_list;
 
 #define __phys_to_upper_virt(__addr) ((virt_addr_t)(KERNEL_VMA_START + ((uintptr_t)(__addr))))
 #define __upper_virt_to_phys(__addr) ((phys_addr_t)(((uintptr_t)(__addr)) - KERNEL_VMA_START))
+
+#define GUEST_PHYS_VMA_START	0xFFFF800100000000ULL
+
+#define __guest_phys_to_virt(__addr) ((virt_addr_t)(GUEST_PHYS_VMA_START + ((uintptr_t)(__addr))))

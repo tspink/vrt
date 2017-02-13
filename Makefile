@@ -20,7 +20,7 @@ export out-dir	    := $(top-dir)/out
 
 export common-flags := -I$(inc-dir) -nostdinc -nostdlib -g -Wall -O3 -std=gnu++14
 export common-flags += -mcmodel=kernel
-export common-flags += -ffreestanding -fno-builtin -fno-omit-frame-pointer -fno-rtti
+export common-flags += -ffreestanding -fno-builtin -fno-omit-frame-pointer -fno-rtti -fno-exceptions
 export common-flags += -fno-delete-null-pointer-checks -fcheck-new -mno-red-zone
 export common-flags += -mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-sse4.2
 export common-flags += -mno-sse4 -mno-avx -mno-aes -mno-sse4a -mno-fma4

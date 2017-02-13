@@ -6,10 +6,10 @@ namespace vrt
 {
 	namespace runtime
 	{
-		class Environment
+		class Processor
 		{
 		public:
-			virtual bool run() = 0;
+			bool run();
 		};
 	}
 }

@@ -58,6 +58,10 @@ static void check_arch_caps()
 	if (!(features.rdx & CPUIDFeatures::PAE)) {
 		fatal("CPU does not support PAE");
 	}
+
+	if (!(features.rdx & CPUIDFeatures::PGE)) {
+		dprintf(DebugLevel::WARNING, "CPU does not support PGE");
+	}
 }
 
 // Starting address to allocate initial page tables from;
@@ -223,13 +227,13 @@ extern "C" __noreturn __noinline void x86_arch_start(phys_addr_t multiboot_info_
 	// (4) Update the initial page tables, so we get access to more memory.
 	update_init_pgt();
 		
-	// (4) Parse the multiboot information structure.
+	// (5) Parse the multiboot information structure.
 	struct MultibootInfo *mbi = (struct MultibootInfo *)(__phys_to_upper_virt(multiboot_info_phys_ptr));
 	if (!mb_parse(mbi)) {
 		dprintf(DebugLevel::FATAL, "unable to read multiboot information structure");
 		host_arch->abort();
 	}
 	
-	// (5) Start the generic runtime.
+	// (6) Start the generic runtime.
 	vrt::runtime::start(cmdline);
 }
