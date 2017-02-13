@@ -79,6 +79,12 @@ static void *alloc_init_pgt()
 	return next;
 }
 
+#define PT_FLAG_PRESENT			0x001
+#define PT_FLAG_WRITABLE		0x002
+#define PT_FLAG_USER_ALLOWED	0x004
+#define PT_FLAG_PAGE_SIZE		0x080
+#define PT_FLAG_GLOBAL			0x100
+
 /**
  * Updates the initial page tables, by removing the lower memory mapping and
  * inserting more entries into the upper address space.
@@ -87,6 +93,12 @@ static void update_init_pgt()
 {
 	typedef uint64_t pte_t;
 	typedef pte_t *ptep_t;
+	
+	const uint16_t default_flags = 
+		PT_FLAG_PRESENT | 
+		PT_FLAG_WRITABLE | 
+		PT_FLAG_USER_ALLOWED | 
+		PT_FLAG_GLOBAL;
 	
 	ptep_t pml4_A = (ptep_t)alloc_init_pgt();	// This is the guest LOW64 page table
 	ptep_t pml4_B = (ptep_t)alloc_init_pgt();	// This is the guest HIGH64 page table
@@ -99,27 +111,27 @@ static void update_init_pgt()
 	ptep_t pd1 = (ptep_t)alloc_init_pgt();
 	
 	// Initialise PML4-A and PML4-B with the same upper pointers.
-	pml4_A[0x1ff] = __upper_virt_to_phys(pdp0) | 0x103;
-	pml4_B[0x1ff] = __upper_virt_to_phys(pdp0) | 0x103;
+	pml4_A[0x1ff] = __upper_virt_to_phys(pdp0) | default_flags;
+	pml4_B[0x1ff] = __upper_virt_to_phys(pdp0) | default_flags;
 	
-	pdp0[0x1fe] = __upper_virt_to_phys(pd0) | 0x103;
-	pdp0[0x1ff] = __upper_virt_to_phys(pd1) | 0x103;
+	pdp0[0x1fe] = __upper_virt_to_phys(pd0) | default_flags;
+	pdp0[0x1ff] = __upper_virt_to_phys(pd1) | default_flags;
 	
 	// Map the entire -2GB VMEM space 1:1 to Physical Memory
 	for (unsigned int i = 0; i < 0x200; i++) {
 		phys_addr_t base = 0x200000 * i;
-		pd0[i] = (pte_t)(base | 0x183);
+		pd0[i] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
 	}
 	
 	for (unsigned int i = 0; i < 0x200; i++) {
 		phys_addr_t base = 0x200000 * (i + 0x200);
-		pd1[i] = (pte_t)(base | 0x183);
+		pd1[i] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
 	}
 	
 	// Map lots of physical memory from the 48-bit split.
 	ptep_t pdp1 = (ptep_t)alloc_init_pgt();
-	pml4_A[0x100] = __upper_virt_to_phys(pdp1) | 0x103;
-	pml4_B[0x100] = __upper_virt_to_phys(pdp1) | 0x103;
+	pml4_A[0x100] = __upper_virt_to_phys(pdp1) | default_flags;
+	pml4_B[0x100] = __upper_virt_to_phys(pdp1) | default_flags;
 
 	// Map 8 GB of physical memory, using 8 * 512 * 2MB pages.
 	for (unsigned int pdp_index = 0; pdp_index < 8; pdp_index++) {
@@ -127,12 +139,12 @@ static void update_init_pgt()
 		ptep_t pd = (ptep_t)alloc_init_pgt();
 		
 		// Insert the PD into the PDP, with PRESENT + WRITE permissions.
-		pdp1[pdp_index] = __upper_virt_to_phys(pd) | 0x103;		
+		pdp1[pdp_index] = __upper_virt_to_phys(pd) | default_flags;		
 		
 		// Install a 1 GB mapping, using 512 * 2MB pages.
 		for (unsigned int pd_index = 0; pd_index < 0x200; pd_index++) {
 			phys_addr_t base = 0x200000 * (pd_index + (pdp_index * 0x200));
-			pd[pd_index] = (pte_t)(base | 0x183);
+			pd[pd_index] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
 		}
 	}
 		
