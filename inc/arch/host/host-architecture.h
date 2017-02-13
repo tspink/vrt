@@ -20,6 +20,8 @@ namespace vrt
 			class HostArchitecture
 			{
 			public:
+				virtual bool init_platform() = 0;
+				
 				__noreturn virtual void abort() = 0;
 				virtual void debug_write(const char *message) = 0;
 				

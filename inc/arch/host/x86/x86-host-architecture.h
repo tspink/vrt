@@ -10,10 +10,14 @@ namespace vrt
 		{
 			namespace x86
 			{
+				class IRQManager;
+				
 				class X86HostArchitecture : public HostArchitecture
 				{
 				public:
 					X86HostArchitecture();
+					
+					bool init_platform() override;
 					
 					__noreturn void abort() override;
 					void debug_write(const char* message) override;
@@ -28,6 +32,7 @@ namespace vrt
 					
 				private:
 					phys_addr_t _pml4_low64, _pml4_high64;
+					IRQManager *_irq_manager;
 					
 					static inline void write_cr3(phys_addr_t pml4)
 					{

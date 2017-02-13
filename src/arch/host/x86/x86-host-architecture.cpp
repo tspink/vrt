@@ -1,4 +1,5 @@
 #include <arch/host/x86/x86-host-architecture.h>
+#include <arch/host/x86/irq.h>
 #include <vrt/mem/mem.h>
 
 using namespace vrt::arch::host;
@@ -8,9 +9,16 @@ using namespace vrt::mem;
 X86HostArchitecture vrt::arch::host::x86::x86_host_arch;
 HostArchitecture *vrt::arch::host::host_arch = &x86_host_arch;
 
-X86HostArchitecture::X86HostArchitecture() : _pml4_low64(0), _pml4_high64(0)
+X86HostArchitecture::X86HostArchitecture() : _pml4_low64(0), _pml4_high64(0), _irq_manager(nullptr)
 {
 
+}
+
+bool X86HostArchitecture::init_platform()
+{
+	_irq_manager = new IRQManager();
+	
+	return _irq_manager->init();
 }
 
 __noreturn void X86HostArchitecture::abort()

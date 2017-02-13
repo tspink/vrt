@@ -28,6 +28,12 @@ __noreturn void vrt::runtime::start(const char *cmdline)
 		dprintf(DebugLevel::FATAL, "vrt: memory subsystem initialisation failed!");
 		host_arch->abort();
 	}
+	
+	// Initialise the host platform.
+	if (!host_arch->init_platform()) {
+		dprintf(DebugLevel::FATAL, "vrt: host platform initialisation failed!");
+		host_arch->abort();
+	}
 		
 	// Create and run the environment.
 	runtime::Environment *env = guest_arch->create_environment();
