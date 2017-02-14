@@ -2,6 +2,7 @@
 #include <vrt/dbt/translation.h>
 #include <vrt/mem/mem.h>
 #include <vrt/runtime/environment.h>
+#include <vrt/runtime/mmu.h>
 #include <vrt/runtime/processor.h>
 #include <vrt/util/debug.h>
 
@@ -10,7 +11,7 @@ using namespace vrt::mem;
 using namespace vrt::runtime;
 using namespace vrt::util;
 
-Processor::Processor(Environment& env) : _env(env), _register_file(nullptr)
+Processor::Processor(Environment& env, MMU& mmu) : _env(env), _mmu(mmu), _register_file(nullptr)
 {
 
 }
@@ -21,6 +22,8 @@ bool Processor::run()
 		dprintf(DebugLevel::ERROR, "proc: register file not allocated");
 		return false;
 	}
+	
+	write_pc(0);
 	
 	while (__likely(!_terminate)) {
 		if (__unlikely(!execute())) {
@@ -45,17 +48,20 @@ void Processor::allocate_register_file(size_t size)
 
 bool Processor::execute()
 {
-	guest_phys_addr_t phys_pc = 0;
+	MMUTranslationRequest treq;
+	treq.va = read_pc();
 	
-	Translation *txln = _env.translation_cache().get(phys_pc);
+	MMUTranslationResponse trsp = _mmu.translate(treq);
+	
+	Translation *txln = _env.translation_cache().get(trsp.pa);
 	if (__unlikely(!txln)) {
-		txln = _env.dbt().translate(phys_pc, TranslationFlags::NONE);
+		txln = _env.dbt().translate(trsp.pa, TranslationFlags::NONE);
 		if (__unlikely(!txln)) {
-			dprintf(DebugLevel::ERROR, "proc: translation failed @ phys-pc=%lx", phys_pc);
+			dprintf(DebugLevel::ERROR, "proc: translation failed @ virt-pc=%lx phys-pc=%lx", treq.va, trsp.pa);
 			return false;
 		}
 		
-		_env.translation_cache().put(phys_pc, txln);
+		_env.translation_cache().put(trsp.pa, txln);
 	}
 	
 	return txln->execute();

@@ -13,7 +13,7 @@ namespace vrt
 				class AArch64Processor : public runtime::Processor
 				{
 				public:
-					AArch64Processor(runtime::Environment& env) : runtime::Processor(env) { }
+					AArch64Processor(runtime::Environment& env, runtime::MMU& mmu);
 				};
 			}
 		}

@@ -10,5 +10,5 @@ CaptiveDBT::CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder) : DBT(deco
 
 Translation *CaptiveDBT::translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags)
 {
-	return 0;
+	return nullptr;
 }

@@ -1,8 +1,10 @@
 #include <arch/guest/aarch64/aarch64-environment.h>
 #include <arch/guest/aarch64/aarch64-processor.h>
+#include <arch/guest/aarch64/aarch64-mmu.h>
 #include <vrt/util/debug.h>
 
 using namespace vrt::arch::guest::aarch64;
+using namespace vrt::runtime;
 using namespace vrt::util;
 
 AArch64Environment::AArch64Environment(dbt::DBT& dbt) : Environment(dbt), _bsp(nullptr)
@@ -34,7 +36,9 @@ bool AArch64Environment::setup_platform()
 {
 	// TODO: Create guest devices
 	
-	_bsp = new AArch64Processor(*this);
+	MMU *mmu = new AArch64MMU();
+	_bsp = new AArch64Processor(*this, *mmu);
+	
 	return true;
 }
 
