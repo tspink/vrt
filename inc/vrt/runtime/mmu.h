@@ -8,12 +8,12 @@ namespace vrt
 	{
 		struct MMUTranslationRequest
 		{
-			guest_virt_addr_t va;
+			gva_t va;
 		};
 
 		struct MMUTranslationResponse
 		{
-			guest_phys_addr_t pa;
+			gpa_t pa;
 		};
 		
 		class MMU

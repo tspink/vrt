@@ -22,15 +22,15 @@ namespace vrt
 		}
 		
 		class Translation;
+		class TranslationContext;
 		
 		class DBT
 		{
 		public:
 			DBT(arch::guest::GuestInstructionDecoder& decoder) : _decoder(decoder) { }
 			
-			virtual Translation *translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags) = 0;
+			virtual Translation *translate(gpa_t pa, TranslationFlags::TranslationFlags flags) = 0;
 			
-		protected:
 			arch::guest::GuestInstructionDecoder& decoder() const { return _decoder; }
 			
 		private:
@@ -42,7 +42,11 @@ namespace vrt
 		public:
 			CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder);
 			
-			Translation *translate(guest_phys_addr_t pa, TranslationFlags::TranslationFlags flags) override;
+			Translation *translate(gpa_t pa, TranslationFlags::TranslationFlags flags) override;
+			
+		private:
+			bool optimise(TranslationContext& ctx);
+			Translation *compile(TranslationContext& ctx);
 		};
 	}
 }

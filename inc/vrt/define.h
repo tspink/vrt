@@ -17,12 +17,6 @@ typedef signed long		intptr_t;
 typedef signed long int		intmax_t;
 typedef unsigned long int	uintmax_t;
 
-typedef uintptr_t		guest_virt_addr_t;
-typedef uintptr_t		guest_phys_addr_t;
-typedef uintptr_t		phys_addr_t;
-typedef uintptr_t		virt_addr_t;
-typedef uint64_t		pfn_t;
-
 #define va_start(v,l)   __builtin_va_start(v,l)
 #define va_end(v)       __builtin_va_end(v)
 #define va_arg(v,l)     __builtin_va_arg(v,l)
@@ -61,21 +55,44 @@ typedef __gnuc_va_list va_list;
 #define STRINGIFY(__N) _STRINGIFY(__N)
 #define _STRINGIFY(__N) #__N
 
-#define __page_bits 12
-#define __page_size (1 << __page_bits)
-#define __page_offset(__addr) ((__addr) & (__page_size - 1))
-#define __page_base(__addr) ((__addr) & ~(__page_size - 1))
-#define __page_index(__addr) ((__addr) >> __page_bits)
-#define __page_base_from_index(__idx) ((__idx) << __page_bits)
+/*
+ *  Paging and pointer arithmetic
+ */
+
+template<typename ptr_t = uintptr_t, uint8_t bits = 12>
+struct __paging {
+	typedef ptr_t pfn_t;
+	typedef ptr_t virt_addr_t;
+	typedef ptr_t phys_addr_t;
+	
+	static constexpr uint8_t page_bits = bits;
+	static constexpr uint64_t page_size = (1ULL << page_bits);
+	
+	static inline constexpr ptr_t page_offset(ptr_t addr) { return (addr & (page_size - 1)); }
+	static inline constexpr ptr_t page_base(ptr_t addr) { return (addr & ~(page_size - 1)); }
+	static inline constexpr pfn_t page_index(ptr_t addr) { return (pfn_t)(addr >> page_bits); }
+	static inline constexpr ptr_t page_base_from_index(pfn_t idx) { return (ptr_t)idx << page_bits; }
+};
+
+typedef __paging<> __host_paging;
+typedef __paging<> __guest_paging;
+
+typedef __host_paging::phys_addr_t hpa_t;
+typedef __host_paging::virt_addr_t hva_t;
+typedef __host_paging::pfn_t hpfn_t;
+
+typedef __guest_paging::phys_addr_t gpa_t;
+typedef __guest_paging::virt_addr_t gva_t;
+typedef __guest_paging::pfn_t gpfn_t;
 
 #define __align_up(__addr) (((__addr) & ~0xfffULL) + (((__addr) & 0xfffULL) ? 0x1000 : 0))
 #define __align_down(__addr) ((__addr) & ~0xfffULL)
 
 #define KERNEL_VMA_START 0xFFFFFFFF80000000ULL
 
-#define __phys_to_upper_virt(__addr) ((virt_addr_t)(KERNEL_VMA_START + ((uintptr_t)(__addr))))
-#define __upper_virt_to_phys(__addr) ((phys_addr_t)(((uintptr_t)(__addr)) - KERNEL_VMA_START))
+#define __phys_to_upper_virt(__addr) ((hva_t)(KERNEL_VMA_START + ((uintptr_t)(__addr))))
+#define __upper_virt_to_phys(__addr) ((hpa_t)(((uintptr_t)(__addr)) - KERNEL_VMA_START))
 
 #define GUEST_PHYS_VMA_START	0xFFFF800100000000ULL
 
-#define __guest_phys_to_virt(__addr) ((virt_addr_t)(GUEST_PHYS_VMA_START + ((uintptr_t)(__addr))))
+#define __guest_phys_to_virt(__addr) ((hva_t)(GUEST_PHYS_VMA_START + ((uintptr_t)(__addr))))

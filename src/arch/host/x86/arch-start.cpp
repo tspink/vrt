@@ -123,12 +123,12 @@ static void update_init_pgt()
 	
 	// Map the entire -2GB VMEM space 1:1 to Physical Memory
 	for (unsigned int i = 0; i < 0x200; i++) {
-		phys_addr_t base = 0x200000 * i;
+		hpa_t base = 0x200000 * i;
 		pd0[i] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
 	}
 	
 	for (unsigned int i = 0; i < 0x200; i++) {
-		phys_addr_t base = 0x200000 * (i + 0x200);
+		hpa_t base = 0x200000 * (i + 0x200);
 		pd1[i] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
 	}
 	
@@ -147,7 +147,7 @@ static void update_init_pgt()
 		
 		// Install a 1 GB mapping, using 512 * 2MB pages.
 		for (unsigned int pd_index = 0; pd_index < 0x200; pd_index++) {
-			phys_addr_t base = 0x200000 * (pd_index + (pdp_index * 0x200));
+			hpa_t base = 0x200000 * (pd_index + (pdp_index * 0x200));
 			pd[pd_index] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
 		}
 	}
@@ -205,7 +205,7 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
  * the system is running in 64-bit mode with a (semi-)temporary page table.
  * @param multiboot_info_ptr
  */
-extern "C" __noreturn __noinline void x86_arch_start(phys_addr_t multiboot_info_phys_ptr)
+extern "C" __noreturn __noinline void x86_arch_start(hpa_t multiboot_info_phys_ptr)
 {
 	// (1) Zero the BSS section, so that uninitialised globals are correctly
 	// initialised to zero.

@@ -5,7 +5,7 @@ using namespace vrt::arch;
 using namespace vrt::arch::guest;
 using namespace vrt::arch::guest::aarch64;
 
-Instruction* AArch64InstructionDecoder::decode(virt_addr_t va)
+Instruction* AArch64InstructionDecoder::decode(hva_t va)
 {
 	return nullptr;
 }

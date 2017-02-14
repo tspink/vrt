@@ -70,7 +70,7 @@ bool Memory::init()
 /**
  * Registers a block of available physical memory.
  */
-void Memory::register_physical_memory(phys_addr_t start, size_t size)
+void Memory::register_physical_memory(hpa_t start, size_t size)
 {
 	for (unsigned int i = 0; i < ARRAY_SIZE(_physical_memory_blocks); i++) {
 		if (!_physical_memory_blocks[i].IsValid) {
@@ -83,10 +83,10 @@ void Memory::register_physical_memory(phys_addr_t start, size_t size)
 	}
 }
 
-bool Memory::reserve_pages(phys_addr_t base, size_t nr_pages)
+bool Memory::reserve_pages(hpa_t base, size_t nr_pages)
 {
 	dprintf(DebugLevel::DEBUG, "mem: reserving %p (%lu)", base, nr_pages);
-	for (phys_addr_t page = base; page < (base + (nr_pages << __page_bits)); page += __page_size) {
+	for (hpa_t page = base; page < (base + (nr_pages << __host_paging::page_bits)); page += __host_paging::page_size) {
 		_page_allocator->reserve_page(pa_to_pgd(page));
 	}
 
@@ -106,23 +106,23 @@ bool Memory::perform_reservations()
 	_page_allocator->reserve_page(pfn_to_pgd(0));
 	
 	// TODO: ABSTRACT THIS! Reserve the initial page tables.
-	reserve_pages((phys_addr_t)0x10000, 16);
+	reserve_pages((hpa_t)0x10000, 16);
 	
 	// Reserve the kernel image
 	uintptr_t start = __align_down((uintptr_t)&_IMAGE_START);
 	uintptr_t end = __align_up((uintptr_t)&_IMAGE_END);
 	
-	reserve_pages((phys_addr_t)start, (end - start) >> __page_bits);
+	reserve_pages((hpa_t)start, (end - start) >> __host_paging::page_bits);
 	
 	// Reserve the stack
 	start = __align_down(__upper_virt_to_phys((uintptr_t)&_STACK_TOP));
 	end = __align_up(__upper_virt_to_phys((uintptr_t)&_STACK_BOTTOM));
 	
-	reserve_pages((phys_addr_t)start, (end - start) >> __page_bits);
+	reserve_pages((hpa_t)start, (end - start) >> __host_paging::page_bits);
 	
 	// Reserve the page descriptor array
 	start = __align_down(__upper_virt_to_phys((uintptr_t)_page_descriptors));
-	reserve_pages((phys_addr_t)start, (_nr_page_descriptors * sizeof(*_page_descriptors)) >> __page_bits);
+	reserve_pages((hpa_t)start, (_nr_page_descriptors * sizeof(*_page_descriptors)) >> __host_paging::page_bits);
 	
 	// ((BuddyPageAllocator *)_page_allocator)->dump();
 	((BuddyPageAllocator *)_page_allocator)->print_statistics();
@@ -141,7 +141,7 @@ bool Memory::initialise_page_descriptors()
 		}
 	}
 
-	_nr_page_descriptors = __page_index(last_address) + 1;
+	_nr_page_descriptors = __host_paging::page_index(last_address) + 1;
 
 	dprintf(DebugLevel::DEBUG, "mem: page count=%lu, page descriptor array @ %p--%p",
 			_nr_page_descriptors,
@@ -159,8 +159,8 @@ bool Memory::initialise_page_descriptors()
 	for (unsigned int block_index = 0; block_index < ARRAY_SIZE(_physical_memory_blocks); block_index++) {
 		if (!_physical_memory_blocks[block_index].IsValid) continue;
 		
-		uint64_t start_page = __page_index(_physical_memory_blocks[block_index].Start);
-		uint64_t end_page = __page_index(_physical_memory_blocks[block_index].End) + 1;
+		uint64_t start_page = __host_paging::page_index(_physical_memory_blocks[block_index].Start);
+		uint64_t end_page = __host_paging::page_index(_physical_memory_blocks[block_index].End) + 1;
 		
 		assert(end_page <= _nr_page_descriptors);
 

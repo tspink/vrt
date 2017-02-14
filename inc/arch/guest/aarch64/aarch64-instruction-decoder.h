@@ -13,7 +13,7 @@ namespace vrt
 				class AArch64InstructionDecoder : public GuestInstructionDecoder
 				{
 				public:
-					Instruction* decode(virt_addr_t va) override;
+					Instruction* decode(hva_t va) override;
 				};
 			}
 		}

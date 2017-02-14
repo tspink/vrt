@@ -31,7 +31,7 @@ namespace vrt
 		public:
 			Memory();
 			
-			void register_physical_memory(phys_addr_t start, size_t size);
+			void register_physical_memory(hpa_t start, size_t size);
 			
 			bool init();
 			
@@ -41,28 +41,28 @@ namespace vrt
 			PageDescriptor *page_descriptors() const { return _page_descriptors; }
 			uint64_t nr_page_descriptors() const { return _nr_page_descriptors; }
 			
-			pfn_t pgd_to_pfn(const PageDescriptor *pgd) const {
+			hpfn_t pgd_to_pfn(const PageDescriptor *pgd) const {
 				return ((uintptr_t)pgd - (uintptr_t)_page_descriptors) / sizeof(*_page_descriptors);
 			}
 			
-			phys_addr_t pgd_to_pa(const PageDescriptor *pgd) const {
-				return (pgd_to_pfn(pgd) << __page_bits);
+			hpa_t pgd_to_pa(const PageDescriptor *pgd) const {
+				return __host_paging::page_base_from_index(pgd_to_pfn(pgd));
 			}
 			
 			void *pgd_to_va(const PageDescriptor *pgd) const {
-				return (void *)((uintptr_t)0xffff800000000000ULL + __page_base_from_index(pgd_to_pfn(pgd)));
+				return (void *)((uintptr_t)0xffff800000000000ULL + __host_paging::page_base_from_index(pgd_to_pfn(pgd)));
 			}
 			
 			PageDescriptor *va_to_pgd(void *va) const {
-				return (PageDescriptor *)&_page_descriptors[(__page_index((uintptr_t)va - 0xffff800000000000ULL))];
+				return (PageDescriptor *)&_page_descriptors[(__host_paging::page_index((uintptr_t)va - 0xffff800000000000ULL))];
 			}
 			
-			PageDescriptor *pfn_to_pgd(pfn_t pfn) const {
+			PageDescriptor *pfn_to_pgd(hpfn_t pfn) const {
 				return &_page_descriptors[pfn];
 			}
 			
-			PageDescriptor *pa_to_pgd(phys_addr_t pa) const {
-				return &_page_descriptors[__page_index(pa)];
+			PageDescriptor *pa_to_pgd(hpa_t pa) const {
+				return &_page_descriptors[__host_paging::page_index(pa)];
 			}
 			
 		private:
@@ -74,13 +74,13 @@ namespace vrt
 			struct PhysicalMemoryBlock
 			{
 				bool IsValid;
-				phys_addr_t Start;
-				phys_addr_t End;
+				hpa_t Start;
+				hpa_t End;
 			};
 			
 			PhysicalMemoryBlock _physical_memory_blocks[8];
 			
-			bool reserve_pages(phys_addr_t base, size_t nr_pages);
+			bool reserve_pages(hpa_t base, size_t nr_pages);
 			bool perform_reservations();
 			bool initialise_page_descriptors();
 		};

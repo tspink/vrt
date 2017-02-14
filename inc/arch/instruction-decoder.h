@@ -10,7 +10,8 @@ namespace vrt
 		
 		class InstructionDecoder
 		{
-			virtual Instruction *decode(virt_addr_t va);
+		public:
+			virtual Instruction *decode(hva_t va) = 0;
 		};
 	}
 }
