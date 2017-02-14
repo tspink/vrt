@@ -24,12 +24,11 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 	while (__guest_paging::page_index(current_pc) == current_page) {
 		hva_t insn_hva = __guest_phys_to_virt(current_pc);
 		
-		fatal("XXX %p", insn_hva);
-		
 		// Decode the guest instruction
 		Instruction *insn = decoder().decode(insn_hva);
 		if (!insn) {
-			// TODO: Translate an "Illegal Instruction"
+			// TODO: Translate illegal instruction
+			break;
 		} else {
 			// Translate the instruction into the context
 			if (!insn->translate(ctx)) {
@@ -42,6 +41,7 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 			break;
 		}
 		
+		// Increment the current working PC by the length of the instruction.
 		current_pc += insn->length();
 	}
 	
