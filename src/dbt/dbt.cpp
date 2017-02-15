@@ -8,6 +8,7 @@
 using namespace vrt::dbt;
 using namespace vrt::arch;
 using namespace vrt::arch::guest;
+using namespace vrt::util;
 
 CaptiveDBT::CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder) : DBT(decoder)
 {
@@ -27,9 +28,15 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		// Decode the guest instruction
 		Instruction *insn = decoder().decode(insn_hva);
 		if (!insn) {
+			dprintf(DebugLevel::DEBUG, "DECODE FAILED");
 			// TODO: Translate illegal instruction
 			break;
 		} else {
+			dprintf(DebugLevel::DEBUG, "DECODE @ %x SUCCEEDED (%u) %s", 
+					current_pc,
+					insn->internal_opcode(),
+					insn->disassemble(current_pc));
+			
 			// Translate the instruction into the context
 			if (!insn->translate(ctx)) {
 				return nullptr;

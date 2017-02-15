@@ -33,7 +33,7 @@ export target           := $(out-dir)/captive-vrt
 export toplevel-obj	:= $(top-dir)/vrt.o
 export linker-script    := $(top-dir)/vrt.ld
 
-export main-cpp-src := $(shell find $(src-dir) | grep -E "\.cpp$$")
+export main-cpp-src := $(shell find -L $(src-dir) | grep -E "\.cpp$$")
 export main-as-src  := $(shell find $(src-dir) | grep -E "\.S$$")
 export main-obj	    := $(main-cpp-src:.cpp=.o) $(main-as-src:.S=.o)
 export main-dep	    := $(main-obj:.o=.d)

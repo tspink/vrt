@@ -16,14 +16,14 @@ namespace vrt
 				class AArch64GuestArchitecture : public GuestArchitecture
 				{
 				public:
-					AArch64GuestArchitecture(AArch64InstructionDecoder& decoder) : _decoder(decoder) { }
+					AArch64GuestArchitecture(GuestInstructionDecoder& decoder) : _decoder(decoder) { }
 					
 					runtime::Environment* create_environment(dbt::DBT& dbt) override;
 					
 					GuestInstructionDecoder& decoder() const override { return _decoder; }
 					
 				private:
-					AArch64InstructionDecoder& _decoder;
+					GuestInstructionDecoder& _decoder;
 				};
 			}
 		}

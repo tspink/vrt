@@ -12,6 +12,7 @@ namespace vrt
 			{
 			public:
 				GuestInstruction(uint64_t opcode) : Instruction(opcode) { }
+				virtual ~GuestInstruction() { }
 			};
 		}
 	}

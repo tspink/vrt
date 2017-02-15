@@ -44,9 +44,14 @@ bool AArch64Environment::setup_platform()
 
 bool AArch64Environment::prepare_bootstrap()
 {
-	uint32_t *gpm = (uint32_t *)__guest_phys_to_virt(0);
+	uint32_t *mem = (uint32_t *)__guest_phys_to_virt(0);
 	
-	gpm[0] = 0x12345678;
+	*mem++ = 0xd4000001;
+	*mem++ = 0xd503201f;
+	*mem++ = 0x14000000;
+	
+	//*mem++ = 0xe1a00000;		// nop
+	//*mem++ = 0xe12fff1c;		// bx ip
 	
 	return true;
 }

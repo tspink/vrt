@@ -21,9 +21,9 @@ namespace vrt
 		public:
 			Instruction(uint64_t opcode) : _opcode(opcode) { }
 			
-			uint64_t opcode() const { return _opcode; }
+			uint64_t internal_opcode() const { return _opcode; }
 			
-			virtual const char *disassemble() const = 0;
+			virtual const char *disassemble(gpa_t pc) const = 0;
 			virtual bool translate(dbt::TranslationContext& ctx) const = 0;
 			virtual uint8_t length() const = 0;
 			virtual const ControlFlowInfo control_flow_info() const = 0; 

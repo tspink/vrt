@@ -96,3 +96,5 @@ typedef __guest_paging::pfn_t gpfn_t;
 #define GUEST_PHYS_VMA_START	0xFFFF800100000000ULL
 
 #define __guest_phys_to_virt(__addr) ((hva_t)(GUEST_PHYS_VMA_START + ((uintptr_t)(__addr))))
+
+extern void *operator new(size_t size, void *ptr);
