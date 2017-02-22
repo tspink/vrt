@@ -34,7 +34,7 @@ namespace vrt
 			void register_physical_memory(hpa_t start, size_t size);
 			void register_boot_mem(hpa_t start, size_t size);
 			
-			bool init(void *page_descriptors_start);
+			bool init(hva_t page_descriptors_start);
 			
 			PageAllocator& pgalloc() { return *_page_allocator; }
 			ObjectAllocator& objalloc() { return *_obj_allocator; }

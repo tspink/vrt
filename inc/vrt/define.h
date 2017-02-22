@@ -93,7 +93,7 @@ typedef __guest_paging::pfn_t gpfn_t;
 //#define __align_up(__addr) (((__addr) & ~0xfffULL) + (((__addr) & 0xfffULL) ? 0x1000 : 0))
 //#define __align_down(__addr) ((__addr) & ~0xfffULL)
 
-#define KERNEL_VMA_START 0xFFFFFFFF80000000ULL
+#define KERNEL_VMA_START ((uintptr_t)0xFFFFFFFF80000000ULL)
 
 #define __phys_to_upper_virt(__addr) ((hva_t)(KERNEL_VMA_START + ((uintptr_t)(__addr))))
 #define __upper_virt_to_phys(__addr) ((hpa_t)(((uintptr_t)(__addr)) - KERNEL_VMA_START))

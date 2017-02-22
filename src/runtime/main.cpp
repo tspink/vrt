@@ -1,5 +1,6 @@
 #include <vrt/runtime/main.h>
 #include <vrt/runtime/environment.h>
+#include <vrt/runtime/modules.h>
 #include <vrt/dbt/dbt.h>
 #include <vrt/mem/mem.h>
 #include <vrt/util/debug.h>
@@ -15,7 +16,7 @@ using namespace vrt::mem;
 using namespace vrt::runtime;
 using namespace vrt::util;
 
-extern uintptr_t __first_avail_page;
+extern hva_t __first_avail_page;
 
 /**
  * Generic runtime start routine.
@@ -28,7 +29,7 @@ __noreturn void vrt::runtime::start(const char *cmdline)
 	host_arch->switch_to_low64();
 
 	// Initialise the memory management subsystem.
-	if (!mm.init((void *)__first_avail_page)) {
+	if (!mm.init(__first_avail_page)) {
 		dprintf(DebugLevel::FATAL, "vrt: memory subsystem initialisation failed!");
 		host_arch->abort();
 	}
@@ -36,6 +37,12 @@ __noreturn void vrt::runtime::start(const char *cmdline)
 	// Initialise the host platform.
 	if (!host_arch->init_platform()) {
 		dprintf(DebugLevel::FATAL, "vrt: host platform initialisation failed!");
+		host_arch->abort();
+	}
+	
+	// Load modules
+	if (!module_manager.load()) {
+		dprintf(DebugLevel::FATAL, "vrt: modules failed to load");
 		host_arch->abort();
 	}
 		

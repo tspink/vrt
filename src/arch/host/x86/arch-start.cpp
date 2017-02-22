@@ -9,6 +9,7 @@
 #include <vrt/mem/mem.h>
 #include <vrt/runtime/environment.h>
 #include <vrt/runtime/main.h>
+#include <vrt/runtime/modules.h>
 #include <vrt/util/debug.h>
 #include <vrt/util/memops.h>
 #include <arch/host/x86/x86-host-architecture.h>
@@ -21,6 +22,7 @@ using namespace vrt::arch::host;
 using namespace vrt::arch::host::x86;
 using namespace vrt::arch::guest;
 using namespace vrt::mem;
+using namespace vrt::runtime;
 using namespace vrt::util;
 
 extern char _BSS_START, _BSS_END;
@@ -170,7 +172,7 @@ static void update_init_pgt()
 static char cmdline[256];
 
 extern char _PAGE_DESCRIPTORS_START;
-uintptr_t __first_avail_page;
+hva_t __first_avail_page;
 
 /**
  * Parses the multiboot information structure.  We need to extract as much information as we're going to use from
@@ -197,7 +199,7 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 	struct MultibootModuleEntry *module_entry = (struct MultibootModuleEntry *)__phys_to_upper_virt(multiboot_info->mods_addr);
 	struct MultibootModuleEntry *module_entry_end = (struct MultibootModuleEntry *)(__phys_to_upper_virt(multiboot_info->mods_addr + multiboot_info->mods_count * sizeof(struct MultibootModuleEntry)));
 	
-	uintptr_t last_module_address = 0;
+	hva_t last_module_address = (hva_t)&_PAGE_DESCRIPTORS_START;
 	while (module_entry < module_entry_end) {
 		dprintf(DebugLevel::DEBUG, 
 				"Module descr=%p cmdline=%p start=%p, end=%p", 
@@ -206,18 +208,25 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 				module_entry->mod_start,
 				module_entry->mod_end);
 		
-		if (module_entry->mod_end > last_module_address) {
-			last_module_address = module_entry->mod_end;
+		hva_t module_start_address = __phys_to_upper_virt(module_entry->mod_start);
+		hva_t module_end_address = __phys_to_upper_virt(module_entry->mod_end);
+		assert(module_end_address > module_start_address);
+		
+		size_t module_size = module_end_address - module_start_address;
+		if (module_end_address > last_module_address) {
+			last_module_address = module_end_address;
 		}
+				
+		// Register the module.
+		module_manager.register_module(
+			module_start_address, 
+			module_size, 
+			(const char *)__phys_to_upper_virt(module_entry->cmdline));
 		
 		module_entry++;
 	}
 	
-	if (last_module_address) {
-		__first_avail_page = __phys_to_upper_virt(last_module_address);
-	} else {
-		__first_avail_page = (uintptr_t)&_PAGE_DESCRIPTORS_START;
-	}
+	__first_avail_page = last_module_address;
 	
 	// Store the command-line
 	strncpy(cmdline, (const char *)__phys_to_upper_virt(multiboot_info->cmdline), sizeof(cmdline)-1);

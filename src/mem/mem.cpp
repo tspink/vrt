@@ -29,7 +29,7 @@ Memory::Memory() : _page_allocator(nullptr), _obj_allocator(nullptr), _page_desc
 /**
  * Initialises the memory management subsystem.
  */
-bool Memory::init(void *page_descriptors_start)
+bool Memory::init(hva_t page_descriptors_start)
 {
 	assert(page_descriptors_start);
 	
@@ -91,7 +91,7 @@ void Memory::register_physical_memory(hpa_t start, size_t size)
  */
 void Memory::register_boot_mem(hpa_t start, size_t size)
 {
-
+	//
 }
 
 bool Memory::reserve_pages(hpa_t base, size_t nr_pages)
@@ -163,7 +163,7 @@ bool Memory::initialise_page_descriptors()
 		_page_descriptors[page_index].Type = PageDescriptorType::INVALID;
 		_page_descriptors[page_index].NextFree = NULL;
 	}
-
+	
 	// Now, loop over each physical memory block, and mark the page descriptors as available,
 	// unless the block is after the 4GB boundary -- in which case it is guest memory.
 	for (unsigned int block_index = 0; block_index < ARRAY_SIZE(_physical_memory_blocks); block_index++) {
