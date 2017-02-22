@@ -67,11 +67,16 @@ struct __paging {
 	
 	static constexpr uint8_t page_bits = bits;
 	static constexpr uint64_t page_size = (1ULL << page_bits);
+	static constexpr uint64_t page_offset_mask = ((1ULL << page_bits) - 1);
+	static constexpr uint64_t page_base_mask = ~((1ULL << page_bits) - 1);
 	
-	static inline constexpr ptr_t page_offset(ptr_t addr) { return (addr & (page_size - 1)); }
-	static inline constexpr ptr_t page_base(ptr_t addr) { return (addr & ~(page_size - 1)); }
+	static inline constexpr ptr_t page_offset(ptr_t addr) { return (addr & page_offset_mask); }
+	static inline constexpr ptr_t page_base(ptr_t addr) { return (addr & page_base_mask); }
 	static inline constexpr pfn_t page_index(ptr_t addr) { return (pfn_t)(addr >> page_bits); }
 	static inline constexpr ptr_t page_base_from_index(pfn_t idx) { return (ptr_t)idx << page_bits; }
+	
+	static inline constexpr ptr_t align_up(ptr_t addr) { return page_base(addr) + ((page_offset(addr) == 0) ? 0 : page_size); }
+	static inline constexpr ptr_t align_down(ptr_t addr) { return page_base(addr); }
 };
 
 typedef __paging<> __host_paging;
@@ -85,8 +90,8 @@ typedef __guest_paging::phys_addr_t gpa_t;
 typedef __guest_paging::virt_addr_t gva_t;
 typedef __guest_paging::pfn_t gpfn_t;
 
-#define __align_up(__addr) (((__addr) & ~0xfffULL) + (((__addr) & 0xfffULL) ? 0x1000 : 0))
-#define __align_down(__addr) ((__addr) & ~0xfffULL)
+//#define __align_up(__addr) (((__addr) & ~0xfffULL) + (((__addr) & 0xfffULL) ? 0x1000 : 0))
+//#define __align_down(__addr) ((__addr) & ~0xfffULL)
 
 #define KERNEL_VMA_START 0xFFFFFFFF80000000ULL
 

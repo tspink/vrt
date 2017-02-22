@@ -109,19 +109,19 @@ bool Memory::perform_reservations()
 	reserve_pages((hpa_t)0x10000, 16);
 	
 	// Reserve the kernel image
-	uintptr_t start = __align_down((uintptr_t)&_IMAGE_START);
-	uintptr_t end = __align_up((uintptr_t)&_IMAGE_END);
+	uintptr_t start = __host_paging::align_down((uintptr_t)&_IMAGE_START);
+	uintptr_t end = __host_paging::align_up((uintptr_t)&_IMAGE_END);
 	
 	reserve_pages((hpa_t)start, (end - start) >> __host_paging::page_bits);
 	
 	// Reserve the stack
-	start = __align_down(__upper_virt_to_phys((uintptr_t)&_STACK_TOP));
-	end = __align_up(__upper_virt_to_phys((uintptr_t)&_STACK_BOTTOM));
+	start = __host_paging::align_down(__upper_virt_to_phys((uintptr_t)&_STACK_TOP));
+	end = __host_paging::align_up(__upper_virt_to_phys((uintptr_t)&_STACK_BOTTOM));
 	
 	reserve_pages((hpa_t)start, (end - start) >> __host_paging::page_bits);
 	
 	// Reserve the page descriptor array
-	start = __align_down(__upper_virt_to_phys((uintptr_t)_page_descriptors));
+	start = __host_paging::align_down(__upper_virt_to_phys((uintptr_t)_page_descriptors));
 	reserve_pages((hpa_t)start, (_nr_page_descriptors * sizeof(*_page_descriptors)) >> __host_paging::page_bits);
 	
 	// ((BuddyPageAllocator *)_page_allocator)->dump();

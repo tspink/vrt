@@ -13,6 +13,11 @@ namespace vrt
 			public:
 				GuestInstruction(uint64_t opcode) : Instruction(opcode) { }
 				virtual ~GuestInstruction() { }
+				
+			protected:
+				void append_str(char *buffer, const char *str) const;
+				void append_hex(char *buffer, uint64_t val) const;
+				void append_dec(char *buffer, uint64_t val) const;
 			};
 		}
 	}

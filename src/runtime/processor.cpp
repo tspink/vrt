@@ -23,6 +23,8 @@ bool Processor::run()
 		return false;
 	}
 	
+	dprintf(DebugLevel::INFO, "proc: here we go!");
+	
 	write_pc(0);
 	
 	while (__likely(!_terminate)) {

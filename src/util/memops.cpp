@@ -26,6 +26,16 @@ __weak char *vrt::util::strncpy(char *dest, const char *src, size_t n)
 	return dest;	
 }
 
+__weak unsigned int vrt::util::strlen(const char *str)
+{
+	unsigned int length = 0;
+	while (*str++) {
+		length++;
+	}
+	
+	return length;
+}
+
 __weak void *vrt::util::memset(void* dest, int c, size_t n)
 {
 	for (unsigned long i = 0; i < n; i++) {

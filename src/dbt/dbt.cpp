@@ -32,10 +32,14 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 			// TODO: Translate illegal instruction
 			break;
 		} else {
+			const char *text = insn->disassemble(current_pc);
+			
 			dprintf(DebugLevel::DEBUG, "DECODE @ %x SUCCEEDED (%u) %s", 
 					current_pc,
 					insn->internal_opcode(),
-					insn->disassemble(current_pc));
+					text);
+			
+			delete text;
 			
 			// Translate the instruction into the context
 			if (!insn->translate(ctx)) {

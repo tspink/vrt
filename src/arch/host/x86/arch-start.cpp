@@ -172,24 +172,30 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 	// Figure out what memory is available.
 	struct MultibootMMAPEntry *mmap_entry = (struct MultibootMMAPEntry *)__phys_to_upper_virt(multiboot_info->mmap_addr);
 	struct MultibootMMAPEntry *mmap_entry_end = (struct MultibootMMAPEntry *)(__phys_to_upper_virt(multiboot_info->mmap_addr + multiboot_info->mmap_length));
-		
+	
 	while (mmap_entry < mmap_entry_end) {
-		
 		switch (mmap_entry->type) {
 		case MULTIBOOT_MEMORY_AVAILABLE:
 			mm.register_physical_memory(mmap_entry->addr, mmap_entry->len);
 			break;
 		}
-		
+				
 		// FIXME: Should this increment by "size"?
 		mmap_entry++;
 	}
-	
-	// Figure out what modules are loaded.
+		
+	// Figure out what modules are loaded, and remember the last address of the loaded module.
 	struct MultibootModuleEntry *module_entry = (struct MultibootModuleEntry *)__phys_to_upper_virt(multiboot_info->mods_addr);
 	struct MultibootModuleEntry *module_entry_end = (struct MultibootModuleEntry *)(__phys_to_upper_virt(multiboot_info->mods_addr + multiboot_info->mods_count * sizeof(struct MultibootModuleEntry)));
 	
 	while (module_entry < module_entry_end) {
+		dprintf(DebugLevel::DEBUG, 
+				"Module descr=%p cmdline=%p start=%p, end=%p", 
+				module_entry,
+				module_entry->cmdline,
+				module_entry->mod_start,
+				module_entry->mod_end);
+				
 		module_entry++;
 	}
 	
@@ -215,6 +221,7 @@ extern "C" __noreturn __noinline void x86_arch_start(hpa_t multiboot_info_phys_p
 	run_static_ctors();
 	
 	// Early information message
+	dprintf(DebugLevel::INFO, "-------------------------------------");
 	dprintf(DebugLevel::INFO, "Starting the Captive Virtual Runtime!");
 	
 	uint64_t rsp;
