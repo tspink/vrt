@@ -76,8 +76,14 @@ static void *alloc_init_pgt()
 {
 	assert(_init_pgt_start < _init_pgt_end);
 	
+	// Obtain an "upper" virtual address pointer to the page table.
 	void *next = (void *)__phys_to_upper_virt(_init_pgt_start);
-	_init_pgt_start += 0x1000;
+	
+	// Register this page as boot memory.
+	mm.register_boot_mem(_init_pgt_start, __host_paging::page_size);
+	
+	// Increase the next-free-page pointer.
+	_init_pgt_start += __host_paging::page_size;
 	
 	vrt::util::pzero(next, 1);
 	return next;
@@ -163,6 +169,9 @@ static void update_init_pgt()
 
 static char cmdline[256];
 
+extern char _PAGE_DESCRIPTORS_START;
+uintptr_t __first_avail_page;
+
 /**
  * Parses the multiboot information structure.  We need to extract as much information as we're going to use from
  * here, so that we can trash the memory later.
@@ -183,11 +192,12 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 		// FIXME: Should this increment by "size"?
 		mmap_entry++;
 	}
-		
+			
 	// Figure out what modules are loaded, and remember the last address of the loaded module.
 	struct MultibootModuleEntry *module_entry = (struct MultibootModuleEntry *)__phys_to_upper_virt(multiboot_info->mods_addr);
 	struct MultibootModuleEntry *module_entry_end = (struct MultibootModuleEntry *)(__phys_to_upper_virt(multiboot_info->mods_addr + multiboot_info->mods_count * sizeof(struct MultibootModuleEntry)));
 	
+	uintptr_t last_module_address = 0;
 	while (module_entry < module_entry_end) {
 		dprintf(DebugLevel::DEBUG, 
 				"Module descr=%p cmdline=%p start=%p, end=%p", 
@@ -195,8 +205,18 @@ static bool mb_parse(struct MultibootInfo *multiboot_info)
 				module_entry->cmdline,
 				module_entry->mod_start,
 				module_entry->mod_end);
-				
+		
+		if (module_entry->mod_end > last_module_address) {
+			last_module_address = module_entry->mod_end;
+		}
+		
 		module_entry++;
+	}
+	
+	if (last_module_address) {
+		__first_avail_page = __phys_to_upper_virt(last_module_address);
+	} else {
+		__first_avail_page = (uintptr_t)&_PAGE_DESCRIPTORS_START;
 	}
 	
 	// Store the command-line

@@ -15,6 +15,8 @@ using namespace vrt::mem;
 using namespace vrt::runtime;
 using namespace vrt::util;
 
+extern uintptr_t __first_avail_page;
+
 /**
  * Generic runtime start routine.
  */
@@ -26,7 +28,7 @@ __noreturn void vrt::runtime::start(const char *cmdline)
 	host_arch->switch_to_low64();
 
 	// Initialise the memory management subsystem.
-	if (!mm.init()) {
+	if (!mm.init((void *)__first_avail_page)) {
 		dprintf(DebugLevel::FATAL, "vrt: memory subsystem initialisation failed!");
 		host_arch->abort();
 	}

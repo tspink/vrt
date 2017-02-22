@@ -13,15 +13,12 @@ static SimpleObjectAllocator simple_objalloc;
 
 Memory vrt::mem::mm;
 
-extern char _PAGE_DESCRIPTORS_START;
-
 Memory::Memory() : _page_allocator(nullptr), _obj_allocator(nullptr), _page_descriptors(nullptr)
 {
 	// Store pointers to the statically allocator memory allocators, and locate the address
 	// of the page descriptor array.
 	_page_allocator = &buddy_pgalloc;
 	_obj_allocator = &simple_objalloc;
-	_page_descriptors = (PageDescriptor *) & _PAGE_DESCRIPTORS_START;
 
 	// Clear the physical_memory_blocks array.
 	for (unsigned int i = 0; i < ARRAY_SIZE(_physical_memory_blocks); i++) {
@@ -32,8 +29,12 @@ Memory::Memory() : _page_allocator(nullptr), _obj_allocator(nullptr), _page_desc
 /**
  * Initialises the memory management subsystem.
  */
-bool Memory::init()
+bool Memory::init(void *page_descriptors_start)
 {
+	assert(page_descriptors_start);
+	
+	_page_descriptors = (PageDescriptor *)page_descriptors_start;
+
 	// Make sure instances of the page allocator and object allocator were registered.
 	if (!_page_allocator || !_obj_allocator) {
 		dprintf(DebugLevel::FATAL, "mem: memory allocators not registered");
@@ -83,6 +84,16 @@ void Memory::register_physical_memory(hpa_t start, size_t size)
 	}
 }
 
+/**
+ * Registers a region of physical memory as "boot" memory.
+ * @param start
+ * @param size
+ */
+void Memory::register_boot_mem(hpa_t start, size_t size)
+{
+
+}
+
 bool Memory::reserve_pages(hpa_t base, size_t nr_pages)
 {
 	dprintf(DebugLevel::DEBUG, "mem: reserving %p (%lu)", base, nr_pages);
@@ -92,7 +103,6 @@ bool Memory::reserve_pages(hpa_t base, size_t nr_pages)
 
 	return true;
 }
-
 
 extern char _IMAGE_START, _IMAGE_END;
 extern char _STACK_TOP, _STACK_BOTTOM;
