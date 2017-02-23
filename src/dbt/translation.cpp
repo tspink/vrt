@@ -12,7 +12,9 @@ Translation::~Translation()
 
 }
 
+extern "C" bool execution_trampoline(uintptr_t native_code_ptr);
+
 bool Translation::execute()
 {
-	return false;
+	return execution_trampoline(nullptr);
 }
