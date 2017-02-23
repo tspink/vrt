@@ -145,6 +145,8 @@ static void update_init_pgt()
 	pml4_A[0x100] = __upper_virt_to_phys(pdp1) | default_flags;
 	pml4_B[0x100] = __upper_virt_to_phys(pdp1) | default_flags;
 
+	hpa_t starting_base = 0;
+	
 	// Map 8 GB of physical memory, using 8 * 512 * 2MB pages.
 	for (unsigned int pdp_index = 0; pdp_index < 8; pdp_index++) {
 		// Allocate a page descriptor table.
@@ -155,18 +157,19 @@ static void update_init_pgt()
 		
 		// Install a 1 GB mapping, using 512 * 2MB pages.
 		for (unsigned int pd_index = 0; pd_index < 0x200; pd_index++) {
-			hpa_t base = 0x200000 * (pd_index + (pdp_index * 0x200));
-			pd[pd_index] = (pte_t)(base | default_flags | PT_FLAG_PAGE_SIZE);
+			//hpa_t base = 0x200000 * (pd_index + (pdp_index * 0x200));
+			pd[pd_index] = (pte_t)(starting_base | default_flags | PT_FLAG_PAGE_SIZE);
+			starting_base += 0x200000;
 		}
 	}
 		
 	// Flush the page table
-	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4_A)));
+	asm volatile("mov %0, %%cr3" :: "r"(__upper_virt_to_phys(pml4_A)) : "memory");
 	
 	// Reload cr4 to flush global page mappings in the TLB
 	uint64_t t;
-	asm volatile("mov %%cr4, %0" : "=r"(t));
-	asm volatile("mov %0, %%cr4" :: "r"(t));
+	asm volatile("mov %%cr4, %0" : "=r"(t) :: "memory");
+	asm volatile("mov %0, %%cr4" :: "r"(t) : "memory");
 }
 
 static char cmdline[256];

@@ -18,6 +18,7 @@ namespace vrt
 				void append_str(char *buffer, const char *str) const;
 				void append_hex(char *buffer, uint64_t val) const;
 				void append_dec(char *buffer, uint64_t val) const;
+				void append_num(char *buffer, uint64_t val, uint8_t base) const;
 			};
 		}
 	}

@@ -66,6 +66,8 @@ namespace vrt
 				return &_page_descriptors[__host_paging::page_index(pa)];
 			}
 			
+			void *copy_to_guest_phys(gpa_t dest, const void *src, size_t size);
+			
 		private:
 			PageAllocator *_page_allocator;
 			ObjectAllocator *_obj_allocator;

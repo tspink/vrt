@@ -56,3 +56,14 @@ bool ModuleManager::register_module(hva_t module_start, size_t module_length, co
 	_nr_modules++;
 	return true;
 }
+
+List<const ModuleDescriptor*> ModuleManager::modules() const
+{
+	List<const ModuleDescriptor *> rc;
+	
+	for (unsigned int i = 0; i < _nr_modules; i++) {
+		rc.append(&_modules[i]);
+	}
+	
+	return rc;
+}

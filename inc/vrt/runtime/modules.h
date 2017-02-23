@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vrt/define.h>
+#include <vrt/util/list.h>
 
 #define MAX_MODULES 4
 
@@ -14,7 +15,7 @@ namespace vrt
 			void *start;
 			size_t size;
 		};
-
+		
 		class ModuleManager
 		{
 		public:
@@ -22,6 +23,8 @@ namespace vrt
 			
 			bool register_module(hva_t module_start, size_t module_length, const char *cmdline);
 			bool load();
+			
+			util::List<const ModuleDescriptor *> modules() const;
 			
 		private:
 			ModuleDescriptor _modules[MAX_MODULES];

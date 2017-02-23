@@ -2,6 +2,7 @@
 #include <vrt/mem/buddy-page-allocator.h>
 #include <vrt/mem/simple-object-allocator.h>
 #include <vrt/util/debug.h>
+#include <vrt/util/memops.h>
 #include <arch/host/host-architecture.h>
 
 using namespace vrt::mem;
@@ -115,6 +116,13 @@ bool Memory::perform_reservations()
 	// Reserve page zero.
 	_page_allocator->reserve_page(pfn_to_pgd(0));
 	
+	// Reserve unavailable blocks.
+	for (unsigned long page_index = 0; page_index < _nr_page_descriptors; page_index++) {
+		if (_page_descriptors[page_index].Type == PageDescriptorType::INVALID) {
+			_page_allocator->reserve_page(&_page_descriptors[page_index]);
+		}
+	}
+	
 	// TODO: ABSTRACT THIS! Reserve the initial page tables.
 	reserve_pages((hpa_t)0x10000, 16);
 	
@@ -194,4 +202,16 @@ bool Memory::initialise_page_descriptors()
 	}
 	
 	return true;
+}
+
+void *Memory::copy_to_guest_phys(gpa_t dest, const void *src, size_t size)
+{
+	assert(dest < 0x100000000ULL);
+	
+	void *gpa_va = (void *)__guest_phys_to_virt(dest);
+	
+	dprintf(DebugLevel::DEBUG, "copy-to-guest: gpa=%p, gpava=%p, hva=%p, size=%lx", dest, gpa_va, src, size);
+	memcpy(gpa_va, src, size);
+		
+	return gpa_va;
 }

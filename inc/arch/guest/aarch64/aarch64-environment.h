@@ -24,6 +24,7 @@ namespace vrt
 					AArch64Processor *_bsp;
 					
 					bool prepare_bootstrap();
+					bool load_kernel();
 					bool setup_platform();
 				};
 			}

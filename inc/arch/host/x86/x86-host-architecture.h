@@ -1,6 +1,7 @@
 #pragma once
 
 #include <arch/host/host-architecture.h>
+#include <arch/host/x86/dt.h>
 
 namespace vrt
 {
@@ -10,8 +11,6 @@ namespace vrt
 		{
 			namespace x86
 			{
-				class IRQManager;
-				
 				class X86HostArchitecture : public HostArchitecture
 				{
 				public:
@@ -32,7 +31,10 @@ namespace vrt
 					
 				private:
 					hpa_t _pml4_low64, _pml4_high64;
-					IRQManager *_irq_manager;
+					
+					__aligned(16) GDT gdt;
+					__aligned(16) IDT idt;
+					__aligned(16) TSS tss;
 					
 					static inline void write_cr3(hpa_t pml4)
 					{

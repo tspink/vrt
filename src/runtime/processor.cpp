@@ -25,7 +25,7 @@ bool Processor::run()
 	
 	dprintf(DebugLevel::INFO, "proc: here we go!");
 	
-	write_pc(0);
+	write_pc(0x10000);
 	
 	while (__likely(!_terminate)) {
 		if (__unlikely(!execute())) {

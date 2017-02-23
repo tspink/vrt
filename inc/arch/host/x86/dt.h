@@ -245,6 +245,7 @@ namespace vrt {
 
 #define MAX_NR_GDT_ENTRIES 16
 
+				class TSS;
 				class GDT : public DT {
 				public:
 					bool init() override;
@@ -256,7 +257,7 @@ namespace vrt {
 					bool add_null();
 					bool add_code_segment(uint8_t dpl);
 					bool add_data_segment(uint8_t dpl);
-					bool add_tss(void *ptr, size_t size);
+					bool add_tss(TSS& tss);
 
 				private:
 					uint8_t _current;
@@ -294,10 +295,6 @@ namespace vrt {
 				private:
 					uint64_t __tss[26];
 				};
-
-				extern GDT gdt;
-				extern IDT idt;
-				extern TSS tss;
 			}
 		}
 	}
