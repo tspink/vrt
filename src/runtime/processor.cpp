@@ -16,6 +16,11 @@ Processor::Processor(Environment& env, MMU& mmu) : _env(env), _mmu(mmu), _regist
 
 }
 
+Processor::~Processor()
+{
+
+}
+
 bool Processor::run()
 {
 	if (!_register_file) {
@@ -42,10 +47,12 @@ void Processor::stop()
 	_terminate = true;
 }
 
-void Processor::allocate_register_file(size_t size)
+void *Processor::allocate_register_file(size_t size)
 {
 	_register_file = mm.objalloc().alloc(size);
 	assert(_register_file);
+	
+	return _register_file;
 }
 
 bool Processor::execute()
@@ -67,4 +74,14 @@ bool Processor::execute()
 	}
 	
 	return txln->execute();
+}
+
+void Processor::trap()
+{
+	fatal("IT'S A TRAP!");
+}
+
+void Processor::add_reg_name(uint64_t offset, uint8_t size, const char* name)
+{
+	//
 }

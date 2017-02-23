@@ -1,5 +1,5 @@
 #include <arch/guest/aarch64/aarch64-environment.h>
-#include <arch/guest/aarch64/aarch64-processor.h>
+#include "output_captive/aarch64-processor.h"
 #include <arch/guest/aarch64/aarch64-mmu.h>
 #include <vrt/mem/mem.h>
 #include <vrt/runtime/modules.h>
@@ -44,8 +44,7 @@ bool AArch64Environment::setup_platform()
 {
 	// TODO: Create guest devices
 	
-	MMU *mmu = new AArch64MMU();
-	_bsp = new AArch64Processor(*this, *mmu);
+	_bsp = new aarch64_processor(*this);
 	
 	return true;
 }

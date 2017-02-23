@@ -10,7 +10,7 @@ namespace vrt
 		{
 			namespace aarch64
 			{
-				class AArch64Processor;
+				class aarch64_processor;
 				
 				class AArch64Environment : public runtime::Environment
 				{
@@ -21,7 +21,7 @@ namespace vrt
 					bool run() override;
 					
 				private:
-					AArch64Processor *_bsp;
+					aarch64_processor *_bsp;
 					
 					bool prepare_bootstrap();
 					bool load_kernel();
