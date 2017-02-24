@@ -1,5 +1,5 @@
 #include <arch/guest/aarch64/aarch64-environment.h>
-#include "output_captive/aarch64-processor.h"
+#include "generated/aarch64-processor.h"
 #include <arch/guest/aarch64/aarch64-mmu.h>
 #include <vrt/mem/mem.h>
 #include <vrt/runtime/modules.h>

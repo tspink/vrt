@@ -1,6 +1,6 @@
 #include <arch/guest/aarch64/aarch64-guest-architecture.h>
 #include <arch/guest/aarch64/aarch64-environment.h>
-#include "output_captive/aarch64-decode.h"
+#include "generated/aarch64-decode.h"
 
 using namespace vrt::arch::guest;
 using namespace vrt::arch::guest::aarch64;
