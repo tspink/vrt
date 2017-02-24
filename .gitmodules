@@ -1,0 +1,3 @@
+[submodule "src/arch/guest/aarch64/generated"]
+	path = src/arch/guest/aarch64/generated
+	url = ssh://kensi.betasafe.com:2222/srv/git/vrt-guest-aarch64.git
