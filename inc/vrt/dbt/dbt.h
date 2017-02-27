@@ -21,6 +21,11 @@ namespace vrt
 			};
 		}
 		
+		namespace ir
+		{
+			class Function;
+		}
+		
 		class Translation;
 		class TranslationContext;
 		
@@ -46,7 +51,7 @@ namespace vrt
 			
 		private:
 			bool optimise(TranslationContext& ctx);
-			Translation *compile(TranslationContext& ctx);
+			Translation *compile(ir::Function& block_fn);
 		};
 	}
 }

@@ -7,6 +7,11 @@ namespace vrt
 	namespace dbt
 	{
 		class TranslationContext;
+		
+		namespace ir
+		{
+			class Function;
+		}
 	}
 	
 	namespace arch
@@ -24,7 +29,7 @@ namespace vrt
 			uint64_t internal_opcode() const { return _opcode; }
 			
 			virtual const char *disassemble(gpa_t pc) const = 0;
-			virtual bool translate(dbt::TranslationContext& ctx) const = 0;
+			virtual bool translate(dbt::ir::Function& fn) const = 0;
 			virtual uint8_t length() const = 0;
 			virtual const ControlFlowInfo control_flow_info() const = 0; 
 			

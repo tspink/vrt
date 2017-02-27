@@ -14,6 +14,9 @@ namespace vrt
 				Function(TranslationContext& owner);
 				
 				BasicBlock *create_block();
+				
+			private:
+				TranslationContext& _owner;
 			};
 		}
 	}

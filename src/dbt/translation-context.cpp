@@ -1,13 +1,15 @@
 #include <vrt/dbt/translation-context.h>
+#include <vrt/dbt/ir/function.h>
 
 using namespace vrt::dbt;
+using namespace vrt::dbt::ir;
 
 TranslationContext::TranslationContext()
 {
 
 }
 
-ir::Function* TranslationContext::create_function()
+Function* TranslationContext::create_function()
 {
-	return nullptr;
+	return new Function(*this);
 }

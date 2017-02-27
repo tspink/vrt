@@ -1,11 +1,13 @@
 #include <vrt/dbt/dbt.h>
 #include <vrt/dbt/translation.h>
 #include <vrt/dbt/translation-context.h>
+#include <vrt/dbt/ir/function.h>
 #include <vrt/util/debug.h>
 #include <arch/guest/guest-instruction-decoder.h>
 #include <arch/guest/guest-instruction.h>
 
 using namespace vrt::dbt;
+using namespace vrt::dbt::ir;
 using namespace vrt::arch;
 using namespace vrt::arch::guest;
 using namespace vrt::util;
@@ -18,6 +20,7 @@ CaptiveDBT::CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder) : DBT(deco
 Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags flags)
 {
 	TranslationContext ctx;
+	Function *block_function = ctx.create_function();
 	
 	gpfn_t current_page = __guest_paging::page_index(pa);
 	gpa_t current_pc = pa;
@@ -41,8 +44,8 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 			
 			delete text;
 			
-			// Translate the instruction into the context
-			if (!insn->translate(ctx)) {
+			// Translate the instruction into the basic-block function
+			if (!insn->translate(*block_function)) {
 				return nullptr;
 			}
 		}
@@ -60,7 +63,7 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		return nullptr;
 	}
 	
-	return compile(ctx);
+	return compile(*block_function);
 }
 
 bool CaptiveDBT::optimise(TranslationContext& ctx)
@@ -68,7 +71,7 @@ bool CaptiveDBT::optimise(TranslationContext& ctx)
 	return true;
 }
 
-Translation* CaptiveDBT::compile(TranslationContext& ctx)
+Translation* CaptiveDBT::compile(Function& block_fn)
 {
 	return nullptr;
 }
