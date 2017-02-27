@@ -4,9 +4,12 @@ namespace vrt
 {
 	namespace dbt
 	{
-		class IR
+		namespace mc
 		{
-			
-		};
+			class Emitter
+			{
+				
+			};
+		}
 	}
 }
