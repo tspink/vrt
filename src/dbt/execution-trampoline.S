@@ -3,6 +3,6 @@
 
 .globl execution_trampoline
 execution_trampoline:
-	xor %eax, %eax
+	mov $1, %eax
 	ret
 

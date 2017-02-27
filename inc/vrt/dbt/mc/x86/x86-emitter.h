@@ -13,6 +13,8 @@ namespace vrt
 				class X86Emitter : public Emitter
 				{
 				public:
+					X86Emitter(TranslationBuffer& buffer);
+					
 					bool emit_function(ir::Function& fn) override;
 				};
 			}

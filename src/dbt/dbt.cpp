@@ -87,12 +87,22 @@ bool CaptiveDBT::optimise(TranslationContext& ctx)
 
 Translation* CaptiveDBT::compile(Function& block_fn)
 {
-	X86Emitter emitter;
+	Translation *txln = new Translation();
 	
+	X86Emitter emitter(txln->buffer());
 	if (!emitter.emit_function(block_fn)) {
+		delete txln;
+		
 		dprintf(DebugLevel::ERROR, "dbt: function emission failed");
 		return nullptr;
 	}
 	
-	return nullptr;
+	if (!txln->prepare()) {
+		delete txln;
+		
+		dprintf(DebugLevel::ERROR, "dbt: translation preparation failed");
+		return nullptr;
+	}
+	
+	return txln;
 }

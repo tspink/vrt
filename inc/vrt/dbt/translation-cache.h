@@ -18,6 +18,7 @@ namespace vrt
 			
 			typedef util::Map<TIDX, Translation *> L2MAP;
 			typedef util::Map<TPFN, L2MAP> L1MAP;
+			typedef util::Map<TKey, Translation *> XMAP;
 			
 			static __pure constexpr TPFN pfn_of(TKey key) {
 				return key >> PAGE_BITS;
@@ -29,24 +30,30 @@ namespace vrt
 
 		public:
 			Translation *get(TKey key) { 
-				L2MAP l2 = _cache[pfn_of(key)];
+				/*L2MAP l2 = _cache[pfn_of(key)];
 				
 				Translation *txln;
 				if (!l2.try_get_value(idx_of(key), txln)) { return nullptr; }
 				
-				return txln; 
+				return txln; */
+				
+				Translation *txln;
+				if (!_xx.try_get_value(key, txln)) return nullptr;
+				return txln;
 			}
 			
 			void put(TKey key, Translation *txln) { 
-				L2MAP l2 = _cache[pfn_of(key)];
-				l2[idx_of(key)] = txln;
+				/*L2MAP l2 = _cache[pfn_of(key)];
+				l2[idx_of(key)] = txln;*/
+				_xx.add(key, txln);
 			}
 			
 			void invalidate_one(TKey key) { }
 			void invalidate_page(TKey key) { }
 			
 		private:
-			L1MAP _cache;
+			//L1MAP _cache;
+			XMAP _xx;
 		};
 	}
 }

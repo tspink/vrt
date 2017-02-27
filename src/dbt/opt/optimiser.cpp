@@ -5,5 +5,5 @@ using namespace vrt::dbt::opt;
 
 bool Optimiser::optimise(TranslationContext& ctx)
 {
-	return false;
+	return true;
 }

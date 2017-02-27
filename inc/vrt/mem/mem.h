@@ -112,6 +112,7 @@ namespace vrt
 		public:
 			virtual bool init() = 0;
 			virtual void *alloc(size_t size) = 0;
+			virtual void *realloc(void *p, size_t size) = 0;
 			virtual void free(void *p) = 0;
 		};
 		
