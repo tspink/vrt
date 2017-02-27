@@ -2,12 +2,17 @@
 #include <vrt/dbt/translation.h>
 #include <vrt/dbt/translation-context.h>
 #include <vrt/dbt/ir/function.h>
+#include <vrt/dbt/opt/optimiser.h>
+#include <vrt/dbt/mc/x86/x86-emitter.h>
 #include <vrt/util/debug.h>
 #include <arch/guest/guest-instruction-decoder.h>
 #include <arch/guest/guest-instruction.h>
 
 using namespace vrt::dbt;
 using namespace vrt::dbt::ir;
+using namespace vrt::dbt::opt;
+using namespace vrt::dbt::mc;
+using namespace vrt::dbt::mc::x86;
 using namespace vrt::arch;
 using namespace vrt::arch::guest;
 using namespace vrt::util;
@@ -31,13 +36,14 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		// Decode the guest instruction
 		Instruction *insn = decoder().decode(insn_hva);
 		if (!insn) {
-			dprintf(DebugLevel::DEBUG, "DECODE FAILED");
-			// TODO: Translate illegal instruction
+			dprintf(DebugLevel::DEBUG, "dbt: instruction decode failed");
 			break;
 		} else {
+			// TODO: Check for illegal instruction
+			
 			const char *text = insn->disassemble(current_pc);
 			
-			dprintf(DebugLevel::DEBUG, "DECODE @ %x SUCCEEDED (%u) %s", 
+			dprintf(DebugLevel::DEBUG, "dbt: decoded @ %lx (opcode=%u) %s", 
 					current_pc,
 					insn->internal_opcode(),
 					text);
@@ -51,7 +57,7 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		}
 		
 		// Stop translating when we encounter control-flow.
-		if (insn->control_flow_info().IsControlFlow) {
+		if (insn->control_flow_info().is_control_flow()) {
 			break;
 		}
 		
@@ -60,18 +66,33 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 	}
 	
 	if (!optimise(ctx)) {
+		dprintf(DebugLevel::ERROR, "dbt: optimisation failed");
 		return nullptr;
 	}
 	
-	return compile(*block_function);
+	Translation *txln = compile(*block_function);
+	if (!txln) {
+		dprintf(DebugLevel::ERROR, "dbt: compilation failed");
+		return nullptr;
+	}
+	
+	return txln;
 }
 
 bool CaptiveDBT::optimise(TranslationContext& ctx)
 {
-	return true;
+	Optimiser opt;
+	return opt.optimise(ctx);
 }
 
 Translation* CaptiveDBT::compile(Function& block_fn)
 {
+	X86Emitter emitter;
+	
+	if (!emitter.emit_function(block_fn)) {
+		dprintf(DebugLevel::ERROR, "dbt: function emission failed");
+		return nullptr;
+	}
+	
 	return nullptr;
 }

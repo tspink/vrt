@@ -19,6 +19,8 @@ namespace vrt
 		struct ControlFlowInfo
 		{
 			bool IsControlFlow;
+			
+			bool is_control_flow() const { return IsControlFlow; }
 		};
 		
 		class Instruction
