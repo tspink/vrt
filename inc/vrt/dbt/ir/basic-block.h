@@ -15,7 +15,13 @@ namespace vrt
 				BasicBlock(Function& owner);
 				
 				void append_statement(Statement& stmt);
-				void insert_statement(Statement& stmt, Statement& after);
+				void insert_statement_before(Statement& stmt, Statement& before);
+				
+				void dump();
+				
+			private:
+				Function& _owner;
+				Statement *_statement_list;
 			};
 		}
 	}

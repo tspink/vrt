@@ -2,6 +2,9 @@
 #include <vrt/dbt/translation.h>
 #include <vrt/dbt/translation-context.h>
 #include <vrt/dbt/ir/function.h>
+#include <vrt/dbt/ir/builder.h>
+#include <vrt/dbt/ir/operand.h>
+#include <vrt/dbt/ir/type.h>
 #include <vrt/dbt/opt/optimiser.h>
 #include <vrt/dbt/mc/x86/x86-emitter.h>
 #include <vrt/util/debug.h>
@@ -65,6 +68,8 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		current_pc += insn->length();
 	}
 	
+	test(*block_function);
+	
 	if (!optimise(ctx)) {
 		dprintf(DebugLevel::ERROR, "dbt: optimisation failed");
 		return nullptr;
@@ -77,6 +82,16 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 	}
 	
 	return txln;
+}
+
+void CaptiveDBT::test(ir::Function& block_fn)
+{
+	Builder b(block_fn.entry_block());
+	
+	auto x = b.add(new Operand(PrimitiveTypes.u32), new Operand(PrimitiveTypes.u32));
+	//b.add(StatementOperand(x), ConstantOperand(7));
+	
+	block_fn.dump();
 }
 
 bool CaptiveDBT::optimise(TranslationContext& ctx)

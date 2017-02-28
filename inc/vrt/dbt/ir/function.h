@@ -12,11 +12,16 @@ namespace vrt
 			{
 			public:
 				Function(TranslationContext& owner);
+				~Function();
 				
-				BasicBlock *create_block();
+				BasicBlock& entry_block() const { return *_entry_block; }
+				BasicBlock& create_block();
+				
+				void dump();
 				
 			private:
 				TranslationContext& _owner;
+				BasicBlock *_entry_block;
 			};
 		}
 	}
