@@ -16,9 +16,11 @@ namespace vrt
 				
 				BasicBlock& block() const { return _block; }
 								
-				inline Statement& add(Operand *LHS, Operand *RHS)
+				inline Statement& add(Operand& LHS, Operand& RHS)
 				{
 					auto stmt = new Statement(StatementType::ADD);
+					stmt->add_operand(LHS);
+					stmt->add_operand(RHS);
 					
 					return append(stmt);
 				}

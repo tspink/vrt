@@ -21,13 +21,20 @@ BasicBlock& Function::create_block()
 	return *new BasicBlock(*this);
 }
 
-void Function::dump()
+String Function::dump() const
 {
-	dprintf(DebugLevel::DEBUG, "Function %p", this);
+	return "FOO";
+	
+	String s;
+	
+	s = "Function ";
+	s += ToString((void *)this);
 	
 	BasicBlock *bb = _entry_block;
 	while (bb) {
-		bb->dump();
+		s += bb->dump();
 		bb = nullptr;
 	}
+	
+	return s;
 }

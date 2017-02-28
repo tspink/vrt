@@ -25,4 +25,8 @@ void Statement::add_operand(Operand& op)
 void Statement::dump() const
 {
 	dprintf(DebugLevel::DEBUG, "%u", _type);
+	
+	for (unsigned int i = 0; i < _nr_operands; i++) {
+		_operands[i]->dump();
+	}
 }

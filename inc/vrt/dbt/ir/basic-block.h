@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vrt/util/string.h>
+
 namespace vrt
 {
 	namespace dbt
@@ -17,7 +19,7 @@ namespace vrt
 				void append_statement(Statement& stmt);
 				void insert_statement_before(Statement& stmt, Statement& before);
 				
-				void dump();
+				util::String dump() const;
 				
 			private:
 				Function& _owner;

@@ -10,6 +10,7 @@ namespace vrt
 		{
 			class BasicBlock;
 			class Operand;
+			class Type;
 			
 			namespace StatementType
 			{
@@ -37,6 +38,8 @@ namespace vrt
 				Statement *next() const { return _next; }
 				Statement *prev() const { return _prev; }
 				
+				const Type& value_type() const { return *_value_type; }
+				
 				void dump() const;
 								
 			private:
@@ -44,6 +47,7 @@ namespace vrt
 				BasicBlock *_owner;
 				Statement *_next, *_prev;
 				Operand *_operands[8];
+				Type *_value_type;
 				unsigned int _nr_operands;
 			};
 		}
