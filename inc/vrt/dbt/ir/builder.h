@@ -25,6 +25,11 @@ namespace vrt
 					return append(stmt);
 				}
 				
+				inline Statement& leave()
+				{
+					return append(new Statement(StatementType::LEAVE));
+				}
+				
 			private:
 				BasicBlock& _block;
 

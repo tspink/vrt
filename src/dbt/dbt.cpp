@@ -70,12 +70,12 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 	
 	test(*block_function);
 	
-	dprintf(DebugLevel::DEBUG, "%s", ctx.dump().c_str());
-	
 	if (!optimise(ctx)) {
 		dprintf(DebugLevel::ERROR, "dbt: optimisation failed");
 		return nullptr;
 	}
+
+	dprintf(DebugLevel::DEBUG, "%s", ctx.dump().c_str());
 	
 	Translation *txln = compile(*block_function);
 	if (!txln) {
@@ -90,8 +90,9 @@ void CaptiveDBT::test(ir::Function& block_fn)
 {
 	Builder b(block_fn.entry_block());
 	
-	auto x = b.add(*new Operand(PrimitiveTypes.u32, 5), *new Operand(PrimitiveTypes.u32, 6));
+	auto& x = b.add(*new Operand(PrimitiveTypes.u32, 5), *new Operand(PrimitiveTypes.u32, 6));
 	b.add(*new Operand(x), *new Operand(PrimitiveTypes.u32, 7));
+	b.leave();
 }
 
 bool CaptiveDBT::optimise(TranslationContext& ctx)

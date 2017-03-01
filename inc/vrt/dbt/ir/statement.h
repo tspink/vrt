@@ -21,7 +21,9 @@ namespace vrt
 					SUB,
 					MUL,
 					DIV,
-					MOD
+					MOD,
+					
+					LEAVE
 				};
 			}
 			

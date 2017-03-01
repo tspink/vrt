@@ -26,8 +26,21 @@ void Statement::add_operand(Operand& op)
 
 String Statement::dump() const
 {
-	String s = "[] ";
+	String s = String("[") + ToString((void *)this) + "] ";
 	
+	switch (_type) {
+	case StatementType::ADD:
+		s += "add";
+		break;
+	case StatementType::LEAVE:
+		s += "leave";
+		break;
+	default:
+		s += "???";
+		break;
+	}
+	
+	s += " ";
 	for (unsigned int i = 0; i < _nr_operands; i++) {
 		assert(_operands[i]);
 		
