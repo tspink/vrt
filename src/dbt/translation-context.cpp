@@ -23,8 +23,9 @@ String TranslationContext::dump() const
 	String s;
 	
 	s = "Translation Context:\n";
+
 	for (auto fn : _functions) {
-		s += fn->dump();
+		s += fn->dump() + "\n";
 	}
 	
 	return s;

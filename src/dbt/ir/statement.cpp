@@ -8,7 +8,9 @@ using namespace vrt::util;
 
 Statement::Statement(StatementType::StatementType type) : _type(type), _owner(nullptr), _next(nullptr), _prev(nullptr), _nr_operands(0)
 {
-
+	for (unsigned int i = 0; i < ARRAY_SIZE(_operands); i++) {
+		_operands[i] = nullptr;
+	}
 }
 
 Statement::~Statement()
@@ -22,11 +24,16 @@ void Statement::add_operand(Operand& op)
 	op._owner = this;
 }
 
-void Statement::dump() const
+String Statement::dump() const
 {
-	dprintf(DebugLevel::DEBUG, "%u", _type);
+	String s = "[] ";
 	
 	for (unsigned int i = 0; i < _nr_operands; i++) {
-		_operands[i]->dump();
+		assert(_operands[i]);
+		
+		if (i > 0) s += ", ";
+		s += _operands[i]->dump();
 	}
+	
+	return s + "\n";
 }

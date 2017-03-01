@@ -4,10 +4,10 @@ using namespace vrt::util;
 
 String vrt::util::ToString(void *v)
 {
-	return "(PTR)";
+	return String("0x") + ToString((uint64_t)v, 16);
 }
 
-String vrt::util::ToString(unsigned int v)
+String vrt::util::ToString(uint64_t v, uint8_t base)
 {
 #define BUFFER_SIZE	16
 	char buffer[BUFFER_SIZE + 1];
@@ -18,8 +18,17 @@ String vrt::util::ToString(unsigned int v)
 		buffer[--i] = '0';
 	} else {
 		while (v > 0 && i >= 0) {
-			buffer[--i] = '0' + (v % 10);
-			v /= 10;
+			uint8_t value = v % base;
+
+			char digit;			
+			if (value < 10) {
+				digit = '0' + value;
+			} else {
+				digit = 'a' + (value - 10);
+			}
+			
+			buffer[--i] = digit;
+			v /= base;
 		}
 	}
 	

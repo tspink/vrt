@@ -23,12 +23,11 @@ BasicBlock& Function::create_block()
 
 String Function::dump() const
 {
-	return "FOO";
-	
 	String s;
 	
 	s = "Function ";
 	s += ToString((void *)this);
+	s += ":\n";
 	
 	BasicBlock *bb = _entry_block;
 	while (bb) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vrt/define.h>
+#include <vrt/util/string.h>
 
 namespace vrt
 {
@@ -40,7 +41,7 @@ namespace vrt
 				
 				const Type& value_type() const { return *_value_type; }
 				
-				void dump() const;
+				util::String dump() const;
 								
 			private:
 				StatementType::StatementType _type;

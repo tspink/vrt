@@ -2,6 +2,7 @@
 
 #include <vrt/define.h>
 #include <vrt/dbt/ir/statement.h>
+#include <vrt/util/string.h>
 
 namespace vrt {
 	namespace dbt {
@@ -32,7 +33,7 @@ namespace vrt {
 				{
 				}
 				
-				void dump();
+				util::String dump() const;
 
 			private:
 				Statement *_owner;

@@ -4,13 +4,14 @@
 using namespace vrt::dbt::ir;
 using namespace vrt::util;
 
-void Operand::dump()
+String Operand::dump() const
 {
-	if (_type == OperandType::CONSTANT) {
-		dprintf(DebugLevel::DEBUG, "#%u", _constant_value);
+	return "Z";
+	/*if (_type == OperandType::CONSTANT) {
+		return String("#") + ToString(_constant_value);
 	} else if (_type == OperandType::STATEMENT) {
-		dprintf(DebugLevel::DEBUG, "%%%p", _stmt_value);
+		return String("%") +  ToString((void *)_stmt_value);
 	} else {
-		dprintf(DebugLevel::DEBUG, "?");
-	}
+		return "?";
+	}*/
 }

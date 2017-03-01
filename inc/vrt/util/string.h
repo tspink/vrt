@@ -93,15 +93,15 @@ namespace vrt
 			}
 			
 			List<String> split(char delim, bool remove_empty);
-	
-			friend String operator+(const String&& l, const String&& r) {
-				String n(l.length() + r.length());
+			
+			String operator+(const String& r) {
+				String n(this->length() + r.length());
 				
-				for (unsigned int i = 0; i < l.length(); i++) {
-					n._data[i] = l._data[i];
+				for (unsigned int i = 0; i < this->length(); i++) {
+					n._data[i] = this->_data[i];
 				}
 
-				unsigned int off = l.length();
+				unsigned int off = this->length();
 				for (unsigned int i = 0; i < r.length(); i++) {
 					n._data[i + off] = r._data[i];
 				}
@@ -111,42 +111,43 @@ namespace vrt
 				return n;
 			}
 			
-			friend String operator+(const String& l, const char& r) {
-				String n(l.length() + 1);
+			String operator+(const String&& r) {
+				return *this + r;
+			}
+						
+			String operator+(const char& r) {
+				String n(this->length() + 1);
 				
-				for (unsigned int i = 0; i < l.length(); i++) {
-					n._data[i] = l._data[i];
+				for (unsigned int i = 0; i < this->length(); i++) {
+					n._data[i] = this->_data[i];
 				}
 				
-				n._data[l.length()] = r;
+				n._data[this->length()] = r;
 				n._data[n._size + 1] = 0;
 				
 				return n;
 			}
 			
-			/*friend String operator+(const String& l, const String& r) {
-				String n(l.length() + r.length());
-				
-				for (unsigned int i = 0; i < l.length(); i++) {
-					n._data[i] = l._data[i];
-				}
-
-				unsigned int o = l.length();
-				for (unsigned int i = 0; i < r.length(); i++) {
-					n._data[o + i] = r._data[i];
-				}
-				n._data[n._size + 1] = 0;
-				
-				return n;
-			}
-			
-			friend String operator+=(const String& l, const String& r) {
-				return l + r;
-			}*/
-			
-			String operator+=(const String& r)
+			String& operator+=(const String& r)
 			{
-				return "X";
+				char *tmp_data = _data;
+				size_t tmp_size = _size;
+				
+				_size = tmp_size + r._size;
+				_data = new char[_size + 1];
+				
+				for (unsigned int i = 0; i < tmp_size; i++) {
+					_data[i] = tmp_data[i];
+				}
+				
+				unsigned int off = tmp_size;
+				for (unsigned int i = 0; i < r._size; i++) {
+					_data[off + i] = r._data[i];
+				}
+				
+				_data[_size + 1] = 0;
+				
+				return *this;
 			}
 			
 			String& operator=(const String& s)
@@ -232,6 +233,6 @@ namespace vrt
 		};
 		
 		extern String ToString(void *p);
-		extern String ToString(unsigned int v);
+		extern String ToString(uint64_t v, uint8_t base=10);
 	}
 }
