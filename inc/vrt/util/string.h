@@ -106,7 +106,7 @@ namespace vrt
 					n._data[i + off] = r._data[i];
 				}
 				
-				n._data[n._size + 1] = 0;
+				n._data[n._size] = 0;
 				
 				return n;
 			}
@@ -123,7 +123,7 @@ namespace vrt
 				}
 				
 				n._data[this->length()] = r;
-				n._data[n._size + 1] = 0;
+				n._data[n._size] = 0;
 				
 				return n;
 			}
@@ -135,18 +135,21 @@ namespace vrt
 				
 				_size = tmp_size + r._size;
 				_data = new char[_size + 1];
+				_has_hash = false;
 				
 				for (unsigned int i = 0; i < tmp_size; i++) {
 					_data[i] = tmp_data[i];
 				}
+				
+				delete tmp_data;
 				
 				unsigned int off = tmp_size;
 				for (unsigned int i = 0; i < r._size; i++) {
 					_data[off + i] = r._data[i];
 				}
 				
-				_data[_size + 1] = 0;
-				
+				_data[_size] = 0;
+								
 				return *this;
 			}
 			
@@ -162,6 +165,9 @@ namespace vrt
 					}
 					
 					_data[_size] = 0;
+					
+					_has_hash = s._has_hash;
+					_hash = s._hash;
 				}
 				
 				return *this;
@@ -174,9 +180,12 @@ namespace vrt
 					
 					_size = s._size;
 					_data = s._data;
+					_has_hash = s._has_hash;
+					_hash = s._hash;
 					
 					s._data = NULL;
 					s._size = 0;
+					s._has_hash = false;
 				}
 				
 				return *this;
@@ -191,6 +200,8 @@ namespace vrt
 			friend bool operator==(const String& l, const String& r)
 			{
 				if (l._size != r._size) return false;
+				
+				if (l._has_hash && r._has_hash) return l._hash == r._hash;
 				
 				for (unsigned int i = 0; i < l._size; i++) {
 					if (l._data[i] != r._data[i]) return false;

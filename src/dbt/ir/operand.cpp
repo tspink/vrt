@@ -6,12 +6,11 @@ using namespace vrt::util;
 
 String Operand::dump() const
 {
-	return "Z";
-	/*if (_type == OperandType::CONSTANT) {
+	if (_type == OperandType::CONSTANT) {
 		return String("#") + ToString(_constant_value);
 	} else if (_type == OperandType::STATEMENT) {
 		return String("%") +  ToString((void *)_stmt_value);
 	} else {
 		return "?";
-	}*/
+	}
 }
