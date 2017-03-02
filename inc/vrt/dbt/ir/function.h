@@ -24,6 +24,8 @@ namespace vrt
 				
 				TranslationContext& owner() const { return _owner; }
 				
+				const util::List<BasicBlock *>& blocks() const { return _blocks; }
+				
 			private:
 				TranslationContext& _owner;
 				BasicBlock *_entry_block;

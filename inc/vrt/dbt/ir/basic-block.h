@@ -23,6 +23,8 @@ namespace vrt
 				
 				Function& owner() const { return _owner; }
 				
+				const Statement& first() { return *_statement_list; }
+				
 			private:
 				Function& _owner;
 				Statement *_statement_list;

@@ -82,6 +82,7 @@ namespace vrt
 				void add_operand(Operand& op);
 				
 				BasicBlock *owner() const { return _owner; }
+				
 				Statement *next() const { return _next; }
 				Statement *prev() const { return _prev; }
 				

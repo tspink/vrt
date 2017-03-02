@@ -16,6 +16,8 @@ namespace vrt {
 			TranslationBuffer();
 			~TranslationBuffer();
 
+			off_t current_offset() const { return _current_offset; }
+			
 			off_t emit(const uint8_t *ptr, size_t length);
 			
 			inline off_t emit8(uint8_t v) { return emit(&v, 1); }
