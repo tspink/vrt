@@ -21,6 +21,8 @@ namespace vrt
 				
 				util::String dump() const;
 				
+				Function& owner() const { return _owner; }
+				
 			private:
 				Function& _owner;
 				Statement *_statement_list;

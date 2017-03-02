@@ -10,7 +10,7 @@ namespace vrt
 		
 		namespace ir
 		{
-			class Function;
+			class Builder;
 		}
 	}
 	
@@ -31,9 +31,11 @@ namespace vrt
 			uint64_t internal_opcode() const { return _opcode; }
 			
 			virtual const char *disassemble(gpa_t pc) const = 0;
-			virtual bool translate(dbt::ir::Function& fn) const = 0;
+			virtual bool translate(dbt::ir::Builder& builder) const = 0;
 			virtual uint8_t length() const = 0;
 			virtual const ControlFlowInfo control_flow_info() const = 0; 
+
+			bool is_end_of_block() const { return control_flow_info().is_control_flow(); }			
 			
 		private:
 			uint64_t _opcode;

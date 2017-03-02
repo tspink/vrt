@@ -18,22 +18,19 @@ Function::~Function()
 
 BasicBlock& Function::create_block()
 {
-	return *new BasicBlock(*this);
+	auto block = new BasicBlock(*this);
+	_blocks.append(block);
+	
+	return *block;
 }
 
 String Function::dump() const
 {
-	String s;
+	dprintf(DebugLevel::DEBUG, "Function %p:", this);
 	
-	s = "Function ";
-	s += ToString((void *)this);
-	s += ":\n";
-	
-	BasicBlock *bb = _entry_block;
-	while (bb) {
-		s += bb->dump();
-		bb = nullptr;
+	for (const auto& block : _blocks) {
+		block->dump();
 	}
 	
-	return s;
+	return "";
 }

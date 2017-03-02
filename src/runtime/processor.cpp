@@ -11,7 +11,7 @@ using namespace vrt::mem;
 using namespace vrt::runtime;
 using namespace vrt::util;
 
-Processor::Processor(Environment& env, MMU& mmu) : _env(env), _mmu(mmu), _register_file(nullptr)
+Processor::Processor(Environment& env, MMU& mmu) : _env(env), _mmu(mmu), _register_file(nullptr), _terminate(false)
 {
 
 }
@@ -64,6 +64,7 @@ bool Processor::execute()
 	
 	Translation *txln = _env.translation_cache().get(trsp.pa);
 	if (__unlikely(!txln)) {
+		dprintf(DebugLevel::DEBUG, "proc: translating @ virt-pc=%lx phys-pc=%lx", treq.va, trsp.pa);
 		txln = _env.dbt().translate(trsp.pa, TranslationFlags::NONE);
 		if (__unlikely(!txln)) {
 			dprintf(DebugLevel::ERROR, "proc: translation failed @ virt-pc=%lx phys-pc=%lx", treq.va, trsp.pa);

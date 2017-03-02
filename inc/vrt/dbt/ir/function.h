@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vrt/util/string.h>
+#include <vrt/util/list.h>
 
 namespace vrt
 {
@@ -21,9 +22,12 @@ namespace vrt
 				
 				util::String dump() const;
 				
+				TranslationContext& owner() const { return _owner; }
+				
 			private:
 				TranslationContext& _owner;
 				BasicBlock *_entry_block;
+				util::List<BasicBlock *> _blocks;
 			};
 		}
 	}

@@ -27,7 +27,7 @@ namespace vrt
 			
 			virtual bool handle_irq(uint8_t irq) = 0;
 			virtual bool handle_page_fault() = 0;
-			virtual bool handle_illegal_instruction() = 0;
+			virtual bool handle_undefined_instruction() = 0;
 			
 			struct {
 				uint64_t *PC, *SP;

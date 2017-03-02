@@ -98,10 +98,16 @@ aarch64_processor::aarch64_processor(Environment& env) : Processor(env, _mmu)
   add_reg_name(270, 1, "I");
   RegisterOffsets.F = (uint8_t *)&reg_file[271];
   add_reg_name(271, 1, "F");
-  RegisterOffsets.FPCR = (uint64_t *)&reg_file[272];
-  add_reg_name(272, 8, "FPCR");
-  RegisterOffsets.FPSR = (uint64_t *)&reg_file[280];
-  add_reg_name(280, 8, "FPSR");
+  RegisterOffsets.EL = (uint8_t *)&reg_file[272];
+  add_reg_name(272, 1, "EL");
+  RegisterOffsets.TTBR0 = (uint64_t *)&reg_file[273];
+  add_reg_name(273, 8, "TTBR0");
+  RegisterOffsets.TTBR1 = (uint64_t *)&reg_file[281];
+  add_reg_name(281, 8, "TTBR1");
+  RegisterOffsets.FPCR = (uint64_t *)&reg_file[289];
+  add_reg_name(289, 8, "FPCR");
+  RegisterOffsets.FPSR = (uint64_t *)&reg_file[297];
+  add_reg_name(297, 8, "FPSR");
 }
 aarch64_processor::~aarch64_processor() 
 {
@@ -184,6 +190,9 @@ void aarch64_processor::dump_state(bool show_hidden) const
   dprintf(DebugLevel::DEBUG, "A = %08x\n", *RegisterOffsets.A);
   dprintf(DebugLevel::DEBUG, "I = %08x\n", *RegisterOffsets.I);
   dprintf(DebugLevel::DEBUG, "F = %08x\n", *RegisterOffsets.F);
+  dprintf(DebugLevel::DEBUG, "EL = %08x\n", *RegisterOffsets.EL);
+  dprintf(DebugLevel::DEBUG, "TTBR0 = %08x\n", *RegisterOffsets.TTBR0);
+  dprintf(DebugLevel::DEBUG, "TTBR1 = %08x\n", *RegisterOffsets.TTBR1);
   dprintf(DebugLevel::DEBUG, "FPCR = %08x\n", *RegisterOffsets.FPCR);
   dprintf(DebugLevel::DEBUG, "FPSR = %08x\n", *RegisterOffsets.FPSR);
 }
@@ -212,7 +221,7 @@ bool aarch64_processor::handle_page_fault()
     return false;
   }
 }
-bool aarch64_processor::handle_illegal_instruction()
+bool aarch64_processor::handle_undefined_instruction()
 {
   {
     trap();

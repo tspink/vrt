@@ -19,7 +19,7 @@ namespace vrt
           void dump_state(bool show_hidden) const override;
           bool handle_irq(uint8_t irq) override;
           bool handle_page_fault() override;
-          bool handle_illegal_instruction() override;
+          bool handle_undefined_instruction() override;
           struct reg_off_t 
           {
             uint64_t *RBX;
@@ -35,6 +35,9 @@ namespace vrt
             uint8_t *A;
             uint8_t *I;
             uint8_t *F;
+            uint8_t *EL;
+            uint64_t *TTBR0;
+            uint64_t *TTBR1;
             uint64_t *FPCR;
             uint64_t *FPSR;
           }

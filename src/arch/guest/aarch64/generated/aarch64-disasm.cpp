@@ -293,8 +293,6 @@ const char *aarch64_insn_adr::disassemble(gpa_t pc) const
     else append_str(buffer, "???");
     append_str(buffer, ",");
     append_str(buffer, " ");
-    append_str(buffer, "0");
-    append_str(buffer, "x");
     append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((imms64))));
     return buffer;
   }
@@ -307,8 +305,6 @@ const char *aarch64_insn_adr::disassemble(gpa_t pc) const
     else append_str(buffer, "???");
     append_str(buffer, ",");
     append_str(buffer, " ");
-    append_str(buffer, "0");
-    append_str(buffer, "x");
     append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((imms64))));
     return buffer;
   }
@@ -700,7 +696,7 @@ const char *aarch64_insn_b::disassemble(gpa_t pc) const
     append_str(buffer, "bl");
     append_str(buffer, " ");
     append_str(buffer, "#");
-    append_dec(buffer, (uint32_t)((imm26)));
+    append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((imms64))));
     return buffer;
   }
   if ((op == (0))) 
@@ -708,7 +704,7 @@ const char *aarch64_insn_b::disassemble(gpa_t pc) const
     append_str(buffer, "b");
     append_str(buffer, " ");
     append_str(buffer, "#");
-    append_dec(buffer, (uint32_t)((imm26)));
+    append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((imms64))));
     return buffer;
   }
   return buffer;
@@ -746,8 +742,6 @@ const char *aarch64_insn_bcond::disassemble(gpa_t pc) const
   if (map_val < 16)append_str(buffer, _map_a64_cond[map_val]);
   else append_str(buffer, "???");
   append_str(buffer, " ");
-  append_str(buffer, "0");
-  append_str(buffer, "x");
   append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((imms64))));
   return buffer;
   return buffer;
@@ -757,7 +751,50 @@ const char *aarch64_insn_bfm::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "bfm");
+  if ((sf == (1))) 
+  {
+    append_str(buffer, "bfm");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((immr)));
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imms)));
+    return buffer;
+  }
+  if ((sf == (0))) 
+  {
+    append_str(buffer, "bfm");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((immr)));
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imms)));
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_bicsr::disassemble(gpa_t pc) const
@@ -956,7 +993,24 @@ const char *aarch64_insn_br::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "br");
+  if ((opc == (1))) 
+  {
+    append_str(buffer, "blr");
+    append_str(buffer, " ");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    return buffer;
+  }
+  if ((opc == (0))) 
+  {
+    append_str(buffer, "br");
+    append_str(buffer, " ");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_cbz::disassemble(gpa_t pc) const
@@ -965,6 +1019,14 @@ const char *aarch64_insn_cbz::disassemble(gpa_t pc) const
   char *buffer = new char[512];
   buffer[0] = 0;
   append_str(buffer, "cbz");
+  append_str(buffer, " ");
+  map_val = 0 + (rt);
+  if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+  else append_str(buffer, "???");
+  append_str(buffer, ",");
+  append_str(buffer, " ");
+  append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((imms64))));
+  return buffer;
   return buffer;
 }
 const char *aarch64_insn_ccmni::disassemble(gpa_t pc) const
@@ -1191,7 +1253,43 @@ const char *aarch64_insn_hint::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
+  if ((crm == (0)) && (op2 == (5))) 
+  {
+    append_str(buffer, "sevl");
+    return buffer;
+  }
+  if ((crm == (0)) && (op2 == (4))) 
+  {
+    append_str(buffer, "sev");
+    return buffer;
+  }
+  if ((crm == (0)) && (op2 == (3))) 
+  {
+    append_str(buffer, "wfi");
+    return buffer;
+  }
+  if ((crm == (0)) && (op2 == (2))) 
+  {
+    append_str(buffer, "wfe");
+    return buffer;
+  }
+  if ((crm == (0)) && (op2 == (1))) 
+  {
+    append_str(buffer, "yield");
+    return buffer;
+  }
+  if ((crm == (0)) && (op2 == (0))) 
+  {
+    append_str(buffer, "nop");
+    return buffer;
+  }
   append_str(buffer, "hint");
+  append_str(buffer, " ");
+  append_str(buffer, "#");
+  append_dec(buffer, (uint32_t)((crm)));
+  append_str(buffer, " ");
+  append_dec(buffer, (uint32_t)((op2)));
+  return buffer;
   return buffer;
 }
 const char *aarch64_insn_ldp::disassemble(gpa_t pc) const
@@ -1199,7 +1297,98 @@ const char *aarch64_insn_ldp::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "ldp");
+  if ((imm7 == (0)) && (opc == (2))) 
+  {
+    append_str(buffer, "ldp");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rt2);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regsx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((imm7 == (0)) && (opc == (0))) 
+  {
+    append_str(buffer, "ldp");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rt2);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regsx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((opc == (2))) 
+  {
+    append_str(buffer, "ldp");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rt2);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regsx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imm7)));
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((opc == (0))) 
+  {
+    append_str(buffer, "ldp");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rt2);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regsx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imm7)));
+    append_str(buffer, "]");
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_ldpi::disassemble(gpa_t pc) const
@@ -1239,7 +1428,30 @@ const char *aarch64_insn_ldr_lit::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "ldr_lit");
+  if ((opc == (1))) 
+  {
+    append_str(buffer, "ldr");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((label))));
+    return buffer;
+  }
+  if ((opc == (0))) 
+  {
+    append_str(buffer, "ldr");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_hex(buffer, (uint64_t)(pc + (int64_t)(uint64_t)((label))));
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_ldr_reg::disassemble(gpa_t pc) const
@@ -1531,7 +1743,70 @@ const char *aarch64_insn_movk::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "movk");
+  if ((hw == (0)) && (sf == (1))) 
+  {
+    append_str(buffer, "movk");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imm16)));
+    return buffer;
+  }
+  if ((hw == (0)) && (sf == (0))) 
+  {
+    append_str(buffer, "movk");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imm16)));
+    return buffer;
+  }
+  if ((sf == (1))) 
+  {
+    append_str(buffer, "movk");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imm16)));
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "LSL");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((shift)));
+    return buffer;
+  }
+  if ((sf == (0))) 
+  {
+    append_str(buffer, "movk");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imm16)));
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "LSL");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((shift)));
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_movn::disassemble(gpa_t pc) const
@@ -1618,6 +1893,18 @@ const char *aarch64_insn_mrs::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
+  if ((crm == (2)) && (crn == (4)) && (op0 == (3)) && (op1 == (0)) && (op2 == (2))) 
+  {
+    append_str(buffer, "mrs");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "currentel");
+    return buffer;
+  }
   append_str(buffer, "mrs");
   append_str(buffer, " ");
   map_val = 0 + (rt);
@@ -1645,7 +1932,39 @@ const char *aarch64_insn_msr_imm::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "msr_imm");
+  if ((op1 == (3)) && (op2 == (7))) 
+  {
+    append_str(buffer, "msr");
+    append_str(buffer, " ");
+    append_str(buffer, "daifclr");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((crm)));
+    return buffer;
+  }
+  if ((op1 == (3)) && (op2 == (6))) 
+  {
+    append_str(buffer, "msr");
+    append_str(buffer, " ");
+    append_str(buffer, "daifset");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((crm)));
+    return buffer;
+  }
+  if ((op1 == (0)) && (op2 == (5))) 
+  {
+    append_str(buffer, "msr");
+    append_str(buffer, " ");
+    append_str(buffer, "spsel");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((crm)));
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_msr_reg::disassemble(gpa_t pc) const
@@ -1992,7 +2311,50 @@ const char *aarch64_insn_sbfm::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "sbfm");
+  if ((sf == (1))) 
+  {
+    append_str(buffer, "sbfm");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((immr)));
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imms)));
+    return buffer;
+  }
+  if ((sf == (0))) 
+  {
+    append_str(buffer, "sbfm");
+    append_str(buffer, " ");
+    map_val = 0 + (rd);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((immr)));
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_dec(buffer, (uint32_t)((imms)));
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_sdiv::disassemble(gpa_t pc) const
@@ -2248,7 +2610,318 @@ const char *aarch64_insn_str_reg::disassemble(gpa_t pc) const
   uint32_t map_val = 0;
   char *buffer = new char[512];
   buffer[0] = 0;
-  append_str(buffer, "str_reg");
+  if ((S == (1)) && (option0 == (1)) && (option21 == (3)) && (size == (3))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "SXTX");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "3");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (0)) && (option21 == (3)) && (size == (3))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "SXTW");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "3");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (1)) && (option21 == (1)) && (size == (3))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "LSL");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "3");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (0)) && (option21 == (1)) && (size == (3))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "UXTW");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "3");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (1)) && (option21 == (3)) && (size == (2))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "SXTX");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "2");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (0)) && (option21 == (3)) && (size == (2))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "SXTW");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "2");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (1)) && (option21 == (1)) && (size == (2))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "LSL");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "2");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (1)) && (option0 == (0)) && (option21 == (1)) && (size == (2))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "UXTW");
+    append_str(buffer, " ");
+    append_str(buffer, "#");
+    append_str(buffer, "2");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (0)) && (option0 == (1)) && (size == (3))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (0)) && (option0 == (0)) && (size == (3))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (0)) && (option0 == (1)) && (size == (2))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, "]");
+    return buffer;
+  }
+  if ((S == (0)) && (option0 == (0)) && (size == (2))) 
+  {
+    append_str(buffer, "str");
+    append_str(buffer, " ");
+    map_val = 0 + (rt);
+    if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "[");
+    map_val = 0 + (rn);
+    if (map_val < 32)append_str(buffer, _map_a64_regx[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ",");
+    append_str(buffer, " ");
+    append_str(buffer, "(");
+    map_val = 0 + (rm);if (map_val < 32)append_str(buffer, _map_a64_regw[map_val]);
+    else append_str(buffer, "???");
+    append_str(buffer, ")");
+    append_str(buffer, "]");
+    return buffer;
+  }
   return buffer;
 }
 const char *aarch64_insn_strb::disassemble(gpa_t pc) const

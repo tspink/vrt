@@ -50,7 +50,6 @@ namespace vrt
 			Translation *translate(gpa_t pa, TranslationFlags::TranslationFlags flags) override;
 			
 		private:
-			void test(ir::Function& block_fn);
 			bool optimise(TranslationContext& ctx);
 			Translation *compile(ir::Function& block_fn);
 		};

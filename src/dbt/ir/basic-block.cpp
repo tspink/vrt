@@ -35,15 +35,13 @@ void BasicBlock::insert_statement_before(Statement& stmt, Statement& before)
 
 String BasicBlock::dump() const
 {
-	String s;
-	
-	s = String("BB ") + ToString((void *)this) + "\n";
+	dprintf(DebugLevel::DEBUG, "Basic Block %p", this);
 	
 	Statement *stmt = _statement_list;
 	while (stmt) {
-		s += stmt->dump();
+		stmt->dump();
 		stmt = stmt->next();
 	}
 	
-	return s;
+	return "";
 }

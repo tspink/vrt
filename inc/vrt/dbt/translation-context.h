@@ -18,7 +18,7 @@ namespace vrt
 		public:
 			TranslationContext();
 			
-			ir::Function *create_function();
+			ir::Function& create_function();
 			
 			util::String dump() const;
 			

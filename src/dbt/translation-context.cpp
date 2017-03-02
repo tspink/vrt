@@ -10,23 +10,21 @@ TranslationContext::TranslationContext()
 
 }
 
-Function* TranslationContext::create_function()
+Function& TranslationContext::create_function()
 {
 	auto fn = new Function(*this);
 	_functions.append(fn);
 	
-	return fn;
+	return *fn;
 }
 
 String TranslationContext::dump() const
 {
-	String s;
-	
-	s = "Translation Context:\n";
+	dprintf(DebugLevel::DEBUG, "Translation Context:");
 
 	for (auto fn : _functions) {
-		s += fn->dump() + "\n";
+		fn->dump();
 	}
 	
-	return s;
+	return "";
 }

@@ -764,7 +764,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldr_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldr_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldr_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldr_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldr_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldr_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldr_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldr_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldr_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -859,7 +860,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_str_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_str_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_str_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_str_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_str_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_str_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_str_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_str_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_str_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -1127,7 +1129,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                       ((aarch64_insn_ldrsw_reg*)insn)->X = BITSEL(ir, 23);
                       ((aarch64_insn_ldrsw_reg*)insn)->L = BITSEL(ir, 22);
                       ((aarch64_insn_ldrsw_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                      ((aarch64_insn_ldrsw_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                      ((aarch64_insn_ldrsw_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                      ((aarch64_insn_ldrsw_reg*)insn)->option0 = BITSEL(ir, 13);
                       ((aarch64_insn_ldrsw_reg*)insn)->S = BITSEL(ir, 12);
                       ((aarch64_insn_ldrsw_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                       ((aarch64_insn_ldrsw_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -1284,7 +1287,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldr_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldr_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldr_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldr_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldr_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldr_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldr_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldr_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldr_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -1379,7 +1383,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_str_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_str_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_str_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_str_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_str_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_str_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_str_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_str_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_str_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -1948,7 +1953,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldrb_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldrb_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldrb_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldrb_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldrb_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldrb_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldrb_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldrb_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldrb_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -1977,7 +1983,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldrb_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldrb_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldrb_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldrb_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldrb_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldrb_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldrb_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldrb_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldrb_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -2006,7 +2013,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldrb_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldrb_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldrb_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldrb_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldrb_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldrb_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldrb_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldrb_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldrb_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -2187,7 +2195,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_strb_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_strb_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_strb_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_strb_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_strb_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_strb_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_strb_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_strb_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_strb_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -2699,7 +2708,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldrh_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldrh_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldrh_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldrh_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldrh_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldrh_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldrh_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldrh_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldrh_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -2728,7 +2738,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldrh_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldrh_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldrh_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldrh_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldrh_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldrh_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldrh_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldrh_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldrh_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -2757,7 +2768,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_ldrh_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_ldrh_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_ldrh_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_ldrh_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_ldrh_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_ldrh_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_ldrh_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_ldrh_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_ldrh_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -2938,7 +2950,8 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
                           ((aarch64_insn_strh_reg*)insn)->X = BITSEL(ir, 23);
                           ((aarch64_insn_strh_reg*)insn)->L = BITSEL(ir, 22);
                           ((aarch64_insn_strh_reg*)insn)->rm = UNSIGNED_BITS(ir, 20,16);
-                          ((aarch64_insn_strh_reg*)insn)->option = UNSIGNED_BITS(ir, 15,13);
+                          ((aarch64_insn_strh_reg*)insn)->option21 = UNSIGNED_BITS(ir, 15,14);
+                          ((aarch64_insn_strh_reg*)insn)->option0 = BITSEL(ir, 13);
                           ((aarch64_insn_strh_reg*)insn)->S = BITSEL(ir, 12);
                           ((aarch64_insn_strh_reg*)insn)->rn = UNSIGNED_BITS(ir, 9,5);
                           ((aarch64_insn_strh_reg*)insn)->rt = UNSIGNED_BITS(ir, 4,0);
@@ -4252,791 +4265,339 @@ Instruction* aarch64_decode_a64::decode(hva_t va_ptr)
 aarch64_insn_adc::aarch64_insn_adc() : aarch64_fmt_a64_ADD_SUB_CARRY(opcodes::aarch64_a64_adc) 
 {
 }
-bool aarch64_insn_adc::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_add_ereg::aarch64_insn_add_ereg() : aarch64_fmt_a64_ADD_SUB_EREG(opcodes::aarch64_a64_add_ereg) 
 {
-}
-bool aarch64_insn_add_ereg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_add_sreg::aarch64_insn_add_sreg() : aarch64_fmt_a64_ADD_SUB_SREG(opcodes::aarch64_a64_add_sreg) 
 {
 }
-bool aarch64_insn_add_sreg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_addi::aarch64_insn_addi() : aarch64_fmt_a64_ADD_SUB_IMM(opcodes::aarch64_a64_addi) 
 {
-}
-bool aarch64_insn_addi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_adr::aarch64_insn_adr() : aarch64_fmt_a64_PC_REL(opcodes::aarch64_a64_adr) 
 {
 }
-bool aarch64_insn_adr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_andi::aarch64_insn_andi() : aarch64_fmt_a64_LOGICAL_IMM(opcodes::aarch64_a64_andi) 
 {
-}
-bool aarch64_insn_andi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_andsr::aarch64_insn_andsr() : aarch64_fmt_a64_LOGICAL_SR(opcodes::aarch64_a64_andsr) 
 {
 }
-bool aarch64_insn_andsr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_asrv::aarch64_insn_asrv() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_asrv) 
 {
-}
-bool aarch64_insn_asrv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_b::aarch64_insn_b() : aarch64_fmt_a64_UB_IMM(opcodes::aarch64_a64_b) 
 {
 }
-bool aarch64_insn_b::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_barrier::aarch64_insn_barrier() : aarch64_fmt_a64_SYSTEM(opcodes::aarch64_a64_barrier) 
 {
-}
-bool aarch64_insn_barrier::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_bcond::aarch64_insn_bcond() : aarch64_fmt_a64_COND_B_IMM(opcodes::aarch64_a64_bcond) 
 {
 }
-bool aarch64_insn_bcond::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_bfm::aarch64_insn_bfm() : aarch64_fmt_a64_BITFIELD(opcodes::aarch64_a64_bfm) 
 {
-}
-bool aarch64_insn_bfm::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_bicsr::aarch64_insn_bicsr() : aarch64_fmt_a64_LOGICAL_SR(opcodes::aarch64_a64_bicsr) 
 {
 }
-bool aarch64_insn_bicsr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_br::aarch64_insn_br() : aarch64_fmt_a64_UB_REG(opcodes::aarch64_a64_br) 
 {
-}
-bool aarch64_insn_br::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_cbz::aarch64_insn_cbz() : aarch64_fmt_a64_CMP_B_IMM(opcodes::aarch64_a64_cbz) 
 {
 }
-bool aarch64_insn_cbz::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ccmni::aarch64_insn_ccmni() : aarch64_fmt_a64_COND_CMP_IMM(opcodes::aarch64_a64_ccmni) 
 {
-}
-bool aarch64_insn_ccmni::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ccmnr::aarch64_insn_ccmnr() : aarch64_fmt_a64_COND_CMP_REG(opcodes::aarch64_a64_ccmnr) 
 {
 }
-bool aarch64_insn_ccmnr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ccmpi::aarch64_insn_ccmpi() : aarch64_fmt_a64_COND_CMP_IMM(opcodes::aarch64_a64_ccmpi) 
 {
-}
-bool aarch64_insn_ccmpi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ccmpr::aarch64_insn_ccmpr() : aarch64_fmt_a64_COND_CMP_REG(opcodes::aarch64_a64_ccmpr) 
 {
 }
-bool aarch64_insn_ccmpr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_cls::aarch64_insn_cls() : aarch64_fmt_a64_DP_1S(opcodes::aarch64_a64_cls) 
 {
-}
-bool aarch64_insn_cls::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_clz::aarch64_insn_clz() : aarch64_fmt_a64_DP_1S(opcodes::aarch64_a64_clz) 
 {
 }
-bool aarch64_insn_clz::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_crc32::aarch64_insn_crc32() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_crc32) 
 {
-}
-bool aarch64_insn_crc32::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_crc32c::aarch64_insn_crc32c() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_crc32c) 
 {
 }
-bool aarch64_insn_crc32c::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_csel::aarch64_insn_csel() : aarch64_fmt_a64_COND_SEL(opcodes::aarch64_a64_csel) 
 {
-}
-bool aarch64_insn_csel::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_csinc::aarch64_insn_csinc() : aarch64_fmt_a64_COND_SEL(opcodes::aarch64_a64_csinc) 
 {
 }
-bool aarch64_insn_csinc::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_csinv::aarch64_insn_csinv() : aarch64_fmt_a64_COND_SEL(opcodes::aarch64_a64_csinv) 
 {
-}
-bool aarch64_insn_csinv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_csneg::aarch64_insn_csneg() : aarch64_fmt_a64_COND_SEL(opcodes::aarch64_a64_csneg) 
 {
 }
-bool aarch64_insn_csneg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_drps::aarch64_insn_drps() : aarch64_fmt_a64_UB_REG(opcodes::aarch64_a64_drps) 
 {
-}
-bool aarch64_insn_drps::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_eori::aarch64_insn_eori() : aarch64_fmt_a64_LOGICAL_IMM(opcodes::aarch64_a64_eori) 
 {
 }
-bool aarch64_insn_eori::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_eorsr::aarch64_insn_eorsr() : aarch64_fmt_a64_LOGICAL_SR(opcodes::aarch64_a64_eorsr) 
 {
-}
-bool aarch64_insn_eorsr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_eret::aarch64_insn_eret() : aarch64_fmt_a64_UB_REG(opcodes::aarch64_a64_eret) 
 {
 }
-bool aarch64_insn_eret::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_exgen::aarch64_insn_exgen() : aarch64_fmt_a64_EX_GEN(opcodes::aarch64_a64_exgen) 
 {
-}
-bool aarch64_insn_exgen::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_extr::aarch64_insn_extr() : aarch64_fmt_a64_EXTRACT(opcodes::aarch64_a64_extr) 
 {
 }
-bool aarch64_insn_extr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_hint::aarch64_insn_hint() : aarch64_fmt_a64_SYSTEM(opcodes::aarch64_a64_hint) 
 {
-}
-bool aarch64_insn_hint::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldp::aarch64_insn_ldp() : aarch64_fmt_a64_LS_REG_PAIR_OFF(opcodes::aarch64_a64_ldp) 
 {
 }
-bool aarch64_insn_ldp::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldpi::aarch64_insn_ldpi() : aarch64_fmt_a64_LS_REG_PAIR_IDX(opcodes::aarch64_a64_ldpi) 
 {
-}
-bool aarch64_insn_ldpi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldpsw::aarch64_insn_ldpsw() : aarch64_fmt_a64_LS_REG_PAIR_OFF(opcodes::aarch64_a64_ldpsw) 
 {
 }
-bool aarch64_insn_ldpsw::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldpswi::aarch64_insn_ldpswi() : aarch64_fmt_a64_LS_REG_PAIR_IDX(opcodes::aarch64_a64_ldpswi) 
 {
-}
-bool aarch64_insn_ldpswi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldr::aarch64_insn_ldr() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_ldr) 
 {
 }
-bool aarch64_insn_ldr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldr_lit::aarch64_insn_ldr_lit() : aarch64_fmt_a64_LOAD_REG_LIT(opcodes::aarch64_a64_ldr_lit) 
 {
-}
-bool aarch64_insn_ldr_lit::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldr_reg::aarch64_insn_ldr_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_ldr_reg) 
 {
 }
-bool aarch64_insn_ldr_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldrb::aarch64_insn_ldrb() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_ldrb) 
 {
-}
-bool aarch64_insn_ldrb::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldrb_reg::aarch64_insn_ldrb_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_ldrb_reg) 
 {
 }
-bool aarch64_insn_ldrb_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldrbi::aarch64_insn_ldrbi() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_ldrbi) 
 {
-}
-bool aarch64_insn_ldrbi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldrh::aarch64_insn_ldrh() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_ldrh) 
 {
 }
-bool aarch64_insn_ldrh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldrh_reg::aarch64_insn_ldrh_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_ldrh_reg) 
 {
-}
-bool aarch64_insn_ldrh_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldrhi::aarch64_insn_ldrhi() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_ldrhi) 
 {
 }
-bool aarch64_insn_ldrhi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldri::aarch64_insn_ldri() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_ldri) 
 {
-}
-bool aarch64_insn_ldri::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldrsw::aarch64_insn_ldrsw() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_ldrsw) 
 {
 }
-bool aarch64_insn_ldrsw::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldrsw_lit::aarch64_insn_ldrsw_lit() : aarch64_fmt_a64_LOAD_REG_LIT(opcodes::aarch64_a64_ldrsw_lit) 
 {
-}
-bool aarch64_insn_ldrsw_lit::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldrsw_reg::aarch64_insn_ldrsw_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_ldrsw_reg) 
 {
 }
-bool aarch64_insn_ldrsw_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldrswi::aarch64_insn_ldrswi() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_ldrswi) 
 {
-}
-bool aarch64_insn_ldrswi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldtr::aarch64_insn_ldtr() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_ldtr) 
 {
 }
-bool aarch64_insn_ldtr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldtrb::aarch64_insn_ldtrb() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_ldtrb) 
 {
-}
-bool aarch64_insn_ldtrb::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldtrh::aarch64_insn_ldtrh() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_ldtrh) 
 {
 }
-bool aarch64_insn_ldtrh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldtrsw::aarch64_insn_ldtrsw() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_ldtrsw) 
 {
-}
-bool aarch64_insn_ldtrsw::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldur::aarch64_insn_ldur() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_ldur) 
 {
 }
-bool aarch64_insn_ldur::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldurb::aarch64_insn_ldurb() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_ldurb) 
 {
-}
-bool aarch64_insn_ldurb::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ldurh::aarch64_insn_ldurh() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_ldurh) 
 {
 }
-bool aarch64_insn_ldurh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ldursw::aarch64_insn_ldursw() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_ldursw) 
 {
-}
-bool aarch64_insn_ldursw::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_lslv::aarch64_insn_lslv() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_lslv) 
 {
 }
-bool aarch64_insn_lslv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_lsrv::aarch64_insn_lsrv() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_lsrv) 
 {
-}
-bool aarch64_insn_lsrv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_madd::aarch64_insn_madd() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_madd) 
 {
 }
-bool aarch64_insn_madd::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_mov::aarch64_insn_mov() : aarch64_fmt_a64_LOGICAL_SR(opcodes::aarch64_a64_mov) 
 {
-}
-bool aarch64_insn_mov::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_movk::aarch64_insn_movk() : aarch64_fmt_a64_MOVE_WIDE_IMM(opcodes::aarch64_a64_movk) 
 {
 }
-bool aarch64_insn_movk::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_movn::aarch64_insn_movn() : aarch64_fmt_a64_MOVE_WIDE_IMM(opcodes::aarch64_a64_movn) 
 {
-}
-bool aarch64_insn_movn::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_movz::aarch64_insn_movz() : aarch64_fmt_a64_MOVE_WIDE_IMM(opcodes::aarch64_a64_movz) 
 {
 }
-bool aarch64_insn_movz::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_mrs::aarch64_insn_mrs() : aarch64_fmt_a64_SYSTEM(opcodes::aarch64_a64_mrs) 
 {
-}
-bool aarch64_insn_mrs::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_msr_imm::aarch64_insn_msr_imm() : aarch64_fmt_a64_SYSTEM(opcodes::aarch64_a64_msr_imm) 
 {
 }
-bool aarch64_insn_msr_imm::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_msr_reg::aarch64_insn_msr_reg() : aarch64_fmt_a64_SYSTEM(opcodes::aarch64_a64_msr_reg) 
 {
-}
-bool aarch64_insn_msr_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_msub::aarch64_insn_msub() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_msub) 
 {
 }
-bool aarch64_insn_msub::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_orri::aarch64_insn_orri() : aarch64_fmt_a64_LOGICAL_IMM(opcodes::aarch64_a64_orri) 
 {
-}
-bool aarch64_insn_orri::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_orrsr::aarch64_insn_orrsr() : aarch64_fmt_a64_LOGICAL_SR(opcodes::aarch64_a64_orrsr) 
 {
 }
-bool aarch64_insn_orrsr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_prfm::aarch64_insn_prfm() : aarch64_fmt_a64_LOAD_REG_LIT(opcodes::aarch64_a64_prfm) 
 {
-}
-bool aarch64_insn_prfm::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_rbit::aarch64_insn_rbit() : aarch64_fmt_a64_DP_1S(opcodes::aarch64_a64_rbit) 
 {
 }
-bool aarch64_insn_rbit::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_ret::aarch64_insn_ret() : aarch64_fmt_a64_UB_REG(opcodes::aarch64_a64_ret) 
 {
-}
-bool aarch64_insn_ret::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_rev::aarch64_insn_rev() : aarch64_fmt_a64_DP_1S(opcodes::aarch64_a64_rev) 
 {
 }
-bool aarch64_insn_rev::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_rev16::aarch64_insn_rev16() : aarch64_fmt_a64_DP_1S(opcodes::aarch64_a64_rev16) 
 {
-}
-bool aarch64_insn_rev16::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_rev32::aarch64_insn_rev32() : aarch64_fmt_a64_DP_1S(opcodes::aarch64_a64_rev32) 
 {
 }
-bool aarch64_insn_rev32::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_rorv::aarch64_insn_rorv() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_rorv) 
 {
-}
-bool aarch64_insn_rorv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_sbc::aarch64_insn_sbc() : aarch64_fmt_a64_ADD_SUB_CARRY(opcodes::aarch64_a64_sbc) 
 {
 }
-bool aarch64_insn_sbc::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_sbfm::aarch64_insn_sbfm() : aarch64_fmt_a64_BITFIELD(opcodes::aarch64_a64_sbfm) 
 {
-}
-bool aarch64_insn_sbfm::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_sdiv::aarch64_insn_sdiv() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_sdiv) 
 {
 }
-bool aarch64_insn_sdiv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_smaddl::aarch64_insn_smaddl() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_smaddl) 
 {
-}
-bool aarch64_insn_smaddl::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_smsubl::aarch64_insn_smsubl() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_smsubl) 
 {
 }
-bool aarch64_insn_smsubl::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_smulh::aarch64_insn_smulh() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_smulh) 
 {
-}
-bool aarch64_insn_smulh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_stp::aarch64_insn_stp() : aarch64_fmt_a64_LS_REG_PAIR_OFF(opcodes::aarch64_a64_stp) 
 {
 }
-bool aarch64_insn_stp::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_stpi::aarch64_insn_stpi() : aarch64_fmt_a64_LS_REG_PAIR_IDX(opcodes::aarch64_a64_stpi) 
 {
-}
-bool aarch64_insn_stpi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_str::aarch64_insn_str() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_str) 
 {
 }
-bool aarch64_insn_str::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_str_reg::aarch64_insn_str_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_str_reg) 
 {
-}
-bool aarch64_insn_str_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_strb::aarch64_insn_strb() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_strb) 
 {
 }
-bool aarch64_insn_strb::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_strb_reg::aarch64_insn_strb_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_strb_reg) 
 {
-}
-bool aarch64_insn_strb_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_strbi::aarch64_insn_strbi() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_strbi) 
 {
 }
-bool aarch64_insn_strbi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_strh::aarch64_insn_strh() : aarch64_fmt_a64_LS_REG_IMM_POST(opcodes::aarch64_a64_strh) 
 {
-}
-bool aarch64_insn_strh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_strh_reg::aarch64_insn_strh_reg() : aarch64_fmt_a64_LS_REG_REG_OFF(opcodes::aarch64_a64_strh_reg) 
 {
 }
-bool aarch64_insn_strh_reg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_strhi::aarch64_insn_strhi() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_strhi) 
 {
-}
-bool aarch64_insn_strhi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_stri::aarch64_insn_stri() : aarch64_fmt_a64_LS_REG_UIMM(opcodes::aarch64_a64_stri) 
 {
 }
-bool aarch64_insn_stri::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_sttr::aarch64_insn_sttr() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_sttr) 
 {
-}
-bool aarch64_insn_sttr::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_sttrb::aarch64_insn_sttrb() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_sttrb) 
 {
 }
-bool aarch64_insn_sttrb::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_sttrh::aarch64_insn_sttrh() : aarch64_fmt_a64_LS_REG_UNPRIV(opcodes::aarch64_a64_sttrh) 
 {
-}
-bool aarch64_insn_sttrh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_stur::aarch64_insn_stur() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_stur) 
 {
 }
-bool aarch64_insn_stur::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_sturb::aarch64_insn_sturb() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_sturb) 
 {
-}
-bool aarch64_insn_sturb::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_sturh::aarch64_insn_sturh() : aarch64_fmt_a64_LS_REG_USIMM(opcodes::aarch64_a64_sturh) 
 {
 }
-bool aarch64_insn_sturh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_sub_ereg::aarch64_insn_sub_ereg() : aarch64_fmt_a64_ADD_SUB_EREG(opcodes::aarch64_a64_sub_ereg) 
 {
-}
-bool aarch64_insn_sub_ereg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_sub_sreg::aarch64_insn_sub_sreg() : aarch64_fmt_a64_ADD_SUB_SREG(opcodes::aarch64_a64_sub_sreg) 
 {
 }
-bool aarch64_insn_sub_sreg::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_subi::aarch64_insn_subi() : aarch64_fmt_a64_ADD_SUB_IMM(opcodes::aarch64_a64_subi) 
 {
-}
-bool aarch64_insn_subi::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_sys::aarch64_insn_sys() : aarch64_fmt_a64_SYSTEM(opcodes::aarch64_a64_sys) 
 {
 }
-bool aarch64_insn_sys::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_tbz::aarch64_insn_tbz() : aarch64_fmt_a64_TEST_B_IMM(opcodes::aarch64_a64_tbz) 
 {
-}
-bool aarch64_insn_tbz::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_ubfm::aarch64_insn_ubfm() : aarch64_fmt_a64_BITFIELD(opcodes::aarch64_a64_ubfm) 
 {
 }
-bool aarch64_insn_ubfm::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_udiv::aarch64_insn_udiv() : aarch64_fmt_a64_DP_2S(opcodes::aarch64_a64_udiv) 
 {
-}
-bool aarch64_insn_udiv::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }
 aarch64_insn_umaddl::aarch64_insn_umaddl() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_umaddl) 
 {
 }
-bool aarch64_insn_umaddl::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_umsubl::aarch64_insn_umsubl() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_umsubl) 
 {
 }
-bool aarch64_insn_umsubl::translate(dbt::ir::Function& fn) const 
-{
-  return true;
-}
 aarch64_insn_umulh::aarch64_insn_umulh() : aarch64_fmt_a64_DP_3S(opcodes::aarch64_a64_umulh) 
 {
-}
-bool aarch64_insn_umulh::translate(dbt::ir::Function& fn) const 
-{
-  return true;
 }

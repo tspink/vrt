@@ -4,6 +4,14 @@
 
 namespace vrt
 {
+	namespace dbt
+	{
+		namespace ir
+		{
+			class Statement;
+		}
+	}
+	
 	namespace arch
 	{
 		namespace guest
@@ -21,6 +29,11 @@ namespace vrt
 			static inline constexpr uint32_t __ROR32(uint32_t v, uint8_t amt)
 			{
 				return (v >> amt) | ((v & ((1 << amt) - 1)) << (32 - amt));
+			}
+			
+			static inline constexpr uint64_t __SEXT64(uint64_t v, uint8_t bits)
+			{
+				return (uint64_t)(((int64_t)(v << (64 - bits))) >> (64 - bits));
 			}
 			
 			static inline constexpr uint32_t UNSIGNED_BITS(uint32_t v, uint8_t u, uint8_t l)

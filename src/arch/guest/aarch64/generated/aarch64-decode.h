@@ -173,6 +173,7 @@ namespace vrt
           uint64_t immu64;
           int64_t imms64;
           uint8_t shift;
+          int64_t label;
         }
         ;
         class aarch64_fmt_a64_ADD_SUB_CARRY : public aarch64_isa_a64
@@ -197,9 +198,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -214,7 +216,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sbc : public aarch64_fmt_a64_ADD_SUB_CARRY
@@ -225,7 +227,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_ADD_SUB_EREG : public aarch64_isa_a64
@@ -252,9 +254,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -269,7 +272,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sub_ereg : public aarch64_fmt_a64_ADD_SUB_EREG
@@ -280,7 +283,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_ADD_SUB_IMM : public aarch64_isa_a64
@@ -305,9 +308,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -322,7 +326,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_subi : public aarch64_fmt_a64_ADD_SUB_IMM
@@ -333,7 +337,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_ADD_SUB_SREG : public aarch64_isa_a64
@@ -359,9 +363,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -376,7 +381,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sub_sreg : public aarch64_fmt_a64_ADD_SUB_SREG
@@ -387,7 +392,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_BITFIELD : public aarch64_isa_a64
@@ -412,9 +417,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -429,7 +435,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_bfm : public aarch64_fmt_a64_BITFIELD
@@ -440,7 +446,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ubfm : public aarch64_fmt_a64_BITFIELD
@@ -451,7 +457,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_CMP_B_IMM : public aarch64_isa_a64
@@ -469,13 +475,17 @@ namespace vrt
           uint8_t rt;
           inline void decode_behaviour()
           {
+            {
+              imms64 = ((int64_t)imm19 << (64 - 19)) >> (64 - 21);
+            }
           }
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -490,7 +500,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_COND_B_IMM : public aarch64_isa_a64
@@ -515,9 +525,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -532,7 +543,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_COND_CMP_IMM : public aarch64_isa_a64
@@ -559,9 +570,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -576,7 +588,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ccmni : public aarch64_fmt_a64_COND_CMP_IMM
@@ -587,7 +599,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_COND_CMP_REG : public aarch64_isa_a64
@@ -614,9 +626,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -631,7 +644,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ccmnr : public aarch64_fmt_a64_COND_CMP_REG
@@ -642,7 +655,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_COND_SEL : public aarch64_isa_a64
@@ -668,9 +681,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -685,7 +699,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_csinc : public aarch64_fmt_a64_COND_SEL
@@ -696,7 +710,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_csinv : public aarch64_fmt_a64_COND_SEL
@@ -707,7 +721,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_csneg : public aarch64_fmt_a64_COND_SEL
@@ -718,7 +732,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_DP_1S : public aarch64_isa_a64
@@ -742,9 +756,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -759,7 +774,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_rev16 : public aarch64_fmt_a64_DP_1S
@@ -770,7 +785,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_rev : public aarch64_fmt_a64_DP_1S
@@ -781,7 +796,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_rev32 : public aarch64_fmt_a64_DP_1S
@@ -792,7 +807,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_clz : public aarch64_fmt_a64_DP_1S
@@ -803,7 +818,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_cls : public aarch64_fmt_a64_DP_1S
@@ -814,7 +829,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_DP_2S : public aarch64_isa_a64
@@ -838,9 +853,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -855,7 +871,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sdiv : public aarch64_fmt_a64_DP_2S
@@ -866,7 +882,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_lslv : public aarch64_fmt_a64_DP_2S
@@ -877,7 +893,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_lsrv : public aarch64_fmt_a64_DP_2S
@@ -888,7 +904,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_asrv : public aarch64_fmt_a64_DP_2S
@@ -899,7 +915,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_rorv : public aarch64_fmt_a64_DP_2S
@@ -910,7 +926,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_crc32 : public aarch64_fmt_a64_DP_2S
@@ -921,7 +937,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_crc32c : public aarch64_fmt_a64_DP_2S
@@ -932,7 +948,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_DP_3S : public aarch64_isa_a64
@@ -958,9 +974,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -975,7 +992,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_msub : public aarch64_fmt_a64_DP_3S
@@ -986,7 +1003,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_smaddl : public aarch64_fmt_a64_DP_3S
@@ -997,7 +1014,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_smsubl : public aarch64_fmt_a64_DP_3S
@@ -1008,7 +1025,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_smulh : public aarch64_fmt_a64_DP_3S
@@ -1019,7 +1036,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_umaddl : public aarch64_fmt_a64_DP_3S
@@ -1030,7 +1047,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_umsubl : public aarch64_fmt_a64_DP_3S
@@ -1041,7 +1058,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_umulh : public aarch64_fmt_a64_DP_3S
@@ -1052,7 +1069,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_EXTRACT : public aarch64_isa_a64
@@ -1078,9 +1095,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1095,7 +1113,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_EX_GEN : public aarch64_isa_a64
@@ -1117,9 +1135,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1134,7 +1153,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LOAD_REG_LIT : public aarch64_isa_a64
@@ -1152,13 +1171,17 @@ namespace vrt
           uint8_t rt;
           inline void decode_behaviour()
           {
+            {
+              label = __SEXT64(imm19 << 2, 21);
+            }
           }
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1173,7 +1196,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrsw_lit : public aarch64_fmt_a64_LOAD_REG_LIT
@@ -1184,7 +1207,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_prfm : public aarch64_fmt_a64_LOAD_REG_LIT
@@ -1195,7 +1218,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LOGICAL_IMM : public aarch64_isa_a64
@@ -1230,9 +1253,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1247,7 +1271,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_orri : public aarch64_fmt_a64_LOGICAL_IMM
@@ -1258,7 +1282,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_eori : public aarch64_fmt_a64_LOGICAL_IMM
@@ -1269,7 +1293,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LOGICAL_SR : public aarch64_isa_a64
@@ -1295,9 +1319,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1312,7 +1337,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_bicsr : public aarch64_fmt_a64_LOGICAL_SR
@@ -1323,7 +1348,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_orrsr : public aarch64_fmt_a64_LOGICAL_SR
@@ -1334,7 +1359,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_eorsr : public aarch64_fmt_a64_LOGICAL_SR
@@ -1345,7 +1370,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_mov : public aarch64_fmt_a64_LOGICAL_SR
@@ -1356,7 +1381,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_IMM_POST : public aarch64_isa_a64
@@ -1382,9 +1407,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1399,7 +1425,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrh : public aarch64_fmt_a64_LS_REG_IMM_POST
@@ -1410,7 +1436,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldr : public aarch64_fmt_a64_LS_REG_IMM_POST
@@ -1421,7 +1447,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrsw : public aarch64_fmt_a64_LS_REG_IMM_POST
@@ -1432,7 +1458,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_strb : public aarch64_fmt_a64_LS_REG_IMM_POST
@@ -1443,7 +1469,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_strh : public aarch64_fmt_a64_LS_REG_IMM_POST
@@ -1454,7 +1480,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_str : public aarch64_fmt_a64_LS_REG_IMM_POST
@@ -1465,7 +1491,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_PAIR_IDX : public aarch64_isa_a64
@@ -1495,9 +1521,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1512,7 +1539,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldpi : public aarch64_fmt_a64_LS_REG_PAIR_IDX
@@ -1523,7 +1550,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldpswi : public aarch64_fmt_a64_LS_REG_PAIR_IDX
@@ -1534,7 +1561,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_PAIR_OFF : public aarch64_isa_a64
@@ -1559,9 +1586,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1576,7 +1604,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldp : public aarch64_fmt_a64_LS_REG_PAIR_OFF
@@ -1587,7 +1615,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldpsw : public aarch64_fmt_a64_LS_REG_PAIR_OFF
@@ -1598,7 +1626,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_REG_OFF : public aarch64_isa_a64
@@ -1615,7 +1643,8 @@ namespace vrt
           uint8_t X;
           uint8_t L;
           uint8_t rm;
-          uint8_t option;
+          uint8_t option21;
+          uint8_t option0;
           uint8_t S;
           uint8_t rn;
           uint8_t rt;
@@ -1625,9 +1654,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1642,7 +1672,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_strh_reg : public aarch64_fmt_a64_LS_REG_REG_OFF
@@ -1653,7 +1683,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_str_reg : public aarch64_fmt_a64_LS_REG_REG_OFF
@@ -1664,7 +1694,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrb_reg : public aarch64_fmt_a64_LS_REG_REG_OFF
@@ -1675,7 +1705,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrh_reg : public aarch64_fmt_a64_LS_REG_REG_OFF
@@ -1686,7 +1716,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldr_reg : public aarch64_fmt_a64_LS_REG_REG_OFF
@@ -1697,7 +1727,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrsw_reg : public aarch64_fmt_a64_LS_REG_REG_OFF
@@ -1708,7 +1738,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_UIMM : public aarch64_isa_a64
@@ -1735,9 +1765,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1752,7 +1783,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrbi : public aarch64_fmt_a64_LS_REG_UIMM
@@ -1763,7 +1794,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_strhi : public aarch64_fmt_a64_LS_REG_UIMM
@@ -1774,7 +1805,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrhi : public aarch64_fmt_a64_LS_REG_UIMM
@@ -1785,7 +1816,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_stri : public aarch64_fmt_a64_LS_REG_UIMM
@@ -1796,7 +1827,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldri : public aarch64_fmt_a64_LS_REG_UIMM
@@ -1807,7 +1838,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldrswi : public aarch64_fmt_a64_LS_REG_UIMM
@@ -1818,7 +1849,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_UNPRIV : public aarch64_isa_a64
@@ -1842,9 +1873,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1859,7 +1891,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldtrb : public aarch64_fmt_a64_LS_REG_UNPRIV
@@ -1870,7 +1902,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sttrh : public aarch64_fmt_a64_LS_REG_UNPRIV
@@ -1881,7 +1913,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldtrh : public aarch64_fmt_a64_LS_REG_UNPRIV
@@ -1892,7 +1924,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sttr : public aarch64_fmt_a64_LS_REG_UNPRIV
@@ -1903,7 +1935,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldtr : public aarch64_fmt_a64_LS_REG_UNPRIV
@@ -1914,7 +1946,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldtrsw : public aarch64_fmt_a64_LS_REG_UNPRIV
@@ -1925,7 +1957,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_LS_REG_USIMM : public aarch64_isa_a64
@@ -1949,9 +1981,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -1966,7 +1999,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldurb : public aarch64_fmt_a64_LS_REG_USIMM
@@ -1977,7 +2010,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sturh : public aarch64_fmt_a64_LS_REG_USIMM
@@ -1988,7 +2021,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldurh : public aarch64_fmt_a64_LS_REG_USIMM
@@ -1999,7 +2032,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_stur : public aarch64_fmt_a64_LS_REG_USIMM
@@ -2010,7 +2043,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldur : public aarch64_fmt_a64_LS_REG_USIMM
@@ -2021,7 +2054,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ldursw : public aarch64_fmt_a64_LS_REG_USIMM
@@ -2032,7 +2065,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_MOVE_WIDE_IMM : public aarch64_isa_a64
@@ -2058,9 +2091,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -2075,7 +2109,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_movz : public aarch64_fmt_a64_MOVE_WIDE_IMM
@@ -2086,7 +2120,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_movk : public aarch64_fmt_a64_MOVE_WIDE_IMM
@@ -2097,7 +2131,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_PC_REL : public aarch64_isa_a64
@@ -2116,22 +2150,24 @@ namespace vrt
           inline void decode_behaviour()
           {
             {
-              if (op == 0) 
+              uint64_t imm = ((uint64_t)immhi << 2) | (uint64_t)(immlo & 0x3);
+              if (op == 1) 
               {
-                imms64 = ((immhi << 2) | immlo);
+                imms64 = __SEXT64(imm << 12, 33);
               }
-              else if (op == 1) 
+              else 
               {
-                imms64 = (((immhi << 2) | immlo) << 12);
+                imms64 = __SEXT64(imm, 21);
               }
             }
           }
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -2146,7 +2182,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_SYSTEM : public aarch64_isa_a64
@@ -2171,9 +2207,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -2188,7 +2225,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_msr_reg : public aarch64_fmt_a64_SYSTEM
@@ -2199,7 +2236,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_mrs : public aarch64_fmt_a64_SYSTEM
@@ -2210,7 +2247,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_hint : public aarch64_fmt_a64_SYSTEM
@@ -2221,7 +2258,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_barrier : public aarch64_fmt_a64_SYSTEM
@@ -2232,7 +2269,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_sys : public aarch64_fmt_a64_SYSTEM
@@ -2243,7 +2280,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_TEST_B_IMM : public aarch64_isa_a64
@@ -2266,9 +2303,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -2283,7 +2321,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_UB_IMM : public aarch64_isa_a64
@@ -2299,13 +2337,17 @@ namespace vrt
           uint32_t imm26;
           inline void decode_behaviour()
           {
+            {
+              imms64 = ((int64_t)imm26 << (64 - 26)) >> (64 - 28);
+            }
           }
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -2320,7 +2362,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_fmt_a64_UB_REG : public aarch64_isa_a64
@@ -2343,9 +2385,10 @@ namespace vrt
           inline bool decode_is_predicated() const
           {
             {
-              return ((opcodes::opcodes)internal_opcode()) == opcodes::aarch64_a64_bcond;
+              return internal_opcode() == opcodes::aarch64_a64_bcond;
             }
           }
+          vrt::dbt::ir::Statement& generate_predicate(vrt::dbt::ir::Builder& builder) const;
           uint8_t length() const override 
           {
             return 4;
@@ -2360,7 +2403,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_ret : public aarch64_fmt_a64_UB_REG
@@ -2371,7 +2414,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_eret : public aarch64_fmt_a64_UB_REG
@@ -2382,7 +2425,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
         class aarch64_insn_drps : public aarch64_fmt_a64_UB_REG
@@ -2393,7 +2436,7 @@ namespace vrt
           {
           }
           const char *disassemble(gpa_t pc) const override;
-          bool translate(dbt::ir::Function& fn) const override;
+          bool translate(dbt::ir::Builder& builder) const override;
         }
         ;
       }

@@ -28,7 +28,8 @@ CaptiveDBT::CaptiveDBT(arch::guest::GuestInstructionDecoder& decoder) : DBT(deco
 Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags flags)
 {
 	TranslationContext ctx;
-	Function *block_function = ctx.create_function();
+	Function& block_function = ctx.create_function();
+	Builder builder(block_function.entry_block());
 	
 	gpfn_t current_page = __guest_paging::page_index(pa);
 	gpa_t current_pc = pa;
@@ -37,6 +38,7 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		hva_t insn_hva = __guest_phys_to_virt(current_pc);
 		
 		// Decode the guest instruction
+		dprintf(DebugLevel::DEBUG, "dbt: decoding @ %p", insn_hva);
 		Instruction *insn = decoder().decode(insn_hva);
 		if (!insn) {
 			dprintf(DebugLevel::DEBUG, "dbt: instruction decode failed");
@@ -54,7 +56,7 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 			delete text;
 			
 			// Translate the instruction into the basic-block function
-			if (!insn->translate(*block_function)) {
+			if (!insn->translate(builder)) {
 				return nullptr;
 			}
 		}
@@ -68,31 +70,22 @@ Translation *CaptiveDBT::translate(gpa_t pa, TranslationFlags::TranslationFlags 
 		current_pc += insn->length();
 	}
 	
-	test(*block_function);
-	
+	builder.leave();
+		
 	if (!optimise(ctx)) {
 		dprintf(DebugLevel::ERROR, "dbt: optimisation failed");
 		return nullptr;
 	}
 
-	dprintf(DebugLevel::DEBUG, "%s", ctx.dump().c_str());
+	ctx.dump();
 	
-	Translation *txln = compile(*block_function);
+	Translation *txln = compile(block_function);
 	if (!txln) {
 		dprintf(DebugLevel::ERROR, "dbt: compilation failed");
 		return nullptr;
 	}
 	
 	return txln;
-}
-
-void CaptiveDBT::test(ir::Function& block_fn)
-{
-	Builder b(block_fn.entry_block());
-	
-	auto& x = b.add(*new Operand(PrimitiveTypes.u32, 5), *new Operand(PrimitiveTypes.u32, 6));
-	b.add(*new Operand(x), *new Operand(PrimitiveTypes.u32, 7));
-	b.leave();
 }
 
 bool CaptiveDBT::optimise(TranslationContext& ctx)

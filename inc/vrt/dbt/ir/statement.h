@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vrt/define.h>
+#include <vrt/dbt/ir/operand.h>
 #include <vrt/util/string.h>
 
 namespace vrt
@@ -23,7 +24,50 @@ namespace vrt
 					DIV,
 					MOD,
 					
-					LEAVE
+					ADC,
+					ADC_FLAGS,
+					SBC,
+					SBC_FLAGS,
+					
+					UPDATE_ZN,
+					
+					SHL,
+					SHR,
+					SAR,
+					ROR,
+					ROL,
+					
+					CMP_EQ,
+					
+					BITWISE_AND,
+					BITWISE_OR,
+					BITWISE_XOR,
+					COMPLEMENT,
+					
+					ZX,
+					SX,
+					TRUNC,
+					
+					READ_REGISTER,
+					WRITE_REGISTER,
+					INC_PC,
+					
+					READ_MEMORY,
+					WRITE_MEMORY,
+					
+					READ_DEVICE,
+					WRITE_DEVICE,
+					
+					ALLOC,
+					LOAD,
+					STORE,
+					
+					JUMP,
+					BRANCH,
+					LEAVE,
+					TRAP,
+					
+					NOP
 				};
 			}
 			
@@ -49,7 +93,7 @@ namespace vrt
 				StatementType::StatementType _type;
 				BasicBlock *_owner;
 				Statement *_next, *_prev;
-				Operand *_operands[8];
+				Operand _operands[8];
 				Type *_value_type;
 				unsigned int _nr_operands;
 			};
